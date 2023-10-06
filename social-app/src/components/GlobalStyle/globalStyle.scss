@@ -9,13 +9,54 @@
 
 :root {
     --main-color-light: #F4F7FC; 
+    --white: #fff;
     --main-color-night: #190A33; 
+    --grey: #a3abb5;
+    --active-grey:#555;
+    --pink: #D988B9;
+    --nav-active-pink: rgba(217, 136, 185, .15);
+    --width-right-side-max: 28%;  
+    --width-right-side-min: 18%;  
+    --green-active: #31a24c;
 }
 
 html {
-    // font-size: 62.5%;
+    font-size: 62.5%;
 }
 
 body {
     font-family: "Poppins", "Inter", sans-serif;
+}
+
+input {
+    outline: none;
+}
+button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    background-color: transparent;
+}
+
+.tippy-box {
+    background-color: #444;
+}
+
+.tippy-arrow {
+    color: #444;
+}
+
+.tippy-content {
+    font-weight: 600;
 }

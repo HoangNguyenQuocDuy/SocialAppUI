@@ -1,0 +1,46 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 77.16px);
+    justify-content: space-between;
+    width: var(--width-right-side-max);
+    background-color: var(--white);
+
+    .tool-user {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+
+        .user-info {
+
+        }
+
+        .setting-box {
+            font-size: 2.5rem;
+            color: var(--grey);
+
+            span {
+                transition: .15s;
+                cursor: pointer;
+
+                &:hover {
+                    > i {
+                        color: var(--pink);
+                    }
+                }
+            }
+
+            .sun-icon {
+                margin-right: 20px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .wrapper {
+        width: var(--width-right-side-min);
+
+    }
+}

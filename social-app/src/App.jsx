@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 
 import  { publicRouters } from './routers'
 import DefaultLayout from '~/Layout/DefaultLayout'
+import './assets/vuesax-icon-main/style.css'
 
 function App() {
 

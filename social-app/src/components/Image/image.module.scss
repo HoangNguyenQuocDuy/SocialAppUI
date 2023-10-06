@@ -1,0 +1,46 @@
+.wrapper {
+    position: relative;
+
+    &.small {
+        width: 38px;
+        height: 38px;
+
+        .mainImg {
+            border-radius: 10px;
+        }
+    }
+
+    &.middle {
+        width: 140px;
+        height: 140px;
+        
+        .mainImg {
+            border-radius: 10px;
+        }
+    }
+
+    .box {
+        .mainImg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sub-box {
+            position: absolute;
+
+            .subImg{
+                
+            }
+        }
+    }
+
+    .active {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        top: 4px;
+        right: -6px;
+        background-color: var(--green-active);
+    }
+}
