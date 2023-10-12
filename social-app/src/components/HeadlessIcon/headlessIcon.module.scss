@@ -1,0 +1,14 @@
+.smile-icon {
+    cursor: pointer;
+
+    i {
+        color: var(--grey);
+        transition: .25s;
+    }
+
+    &:hover, &.active {
+        i {
+            color: var(--icon-hover);
+        }
+    };
+}

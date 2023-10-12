@@ -1,0 +1,95 @@
+.wrapper {
+    width: 120px;
+    height: 175px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    border-radius: 10px;
+
+    &:hover {
+        .story {
+            >img {
+                transition: .15s;
+                transform: scale(1.03);
+            }
+        }
+
+        &::after {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &::after {
+        content: "";
+        background-color: rgba(110, 107, 107, .2);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-radius: 10px;
+        z-index: 20;
+    }
+
+    .story {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        >img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            border-radius: 10px;
+        }
+
+        .catLeg-icon-box {
+            position: absolute;
+            top: -32px;
+            right: -20px;
+            font-size: 4rem;
+            transform: rotate(30deg);
+            z-index: 1;
+            color: var(--pink);
+        }
+
+        .avatar-box {
+            position: absolute;
+            top: 12px;
+            left: 10px;
+
+            img {
+                border-radius: 50% !important;
+            }
+        }
+    }
+
+    .plus-icon-box {
+        position: absolute;
+        height: 36%;
+        top: 64%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        background-color: #999;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        border-radius: 0 0 10px 10px;
+
+        i {
+            position: absolute;
+            top: -20px;
+            font-size: 2rem;
+            height: auto;
+            color: var(--white);
+            padding: 8px 10px;
+            border-radius: 50%;
+            background-color: var(--pink);
+            border: 4px solid #999;
+        }
+    }
+}

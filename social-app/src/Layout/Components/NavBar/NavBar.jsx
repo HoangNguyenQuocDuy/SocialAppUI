@@ -53,7 +53,7 @@ function NavBar() {
                         {/* eslint-disable-next-line no-unused-vars */}
                         {({ isActive, isPending }) => (
                             <li>
-                                <NavItem active={isActive} icon={item.icon} to={item.to} content={item.content} middle />
+                                <NavItem active={isActive} icon={item.icon} unTo={true} content={item.content} middle />
                             </li>
                         )}
                     </NavLink>

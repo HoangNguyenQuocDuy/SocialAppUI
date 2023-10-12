@@ -1,0 +1,27 @@
+.wrapper {
+    flex: 1;
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    font-size: 1.6rem;
+
+    .container {
+        max-width: 1140px;
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+
+        .wrapper-left {
+            padding: 0 15px;
+            width: 75%;
+
+            .stories {
+                margin-top: 18px;
+            }
+        }
+    
+        .wrapper-right {
+            flex: 1;
+        }
+    }
+}

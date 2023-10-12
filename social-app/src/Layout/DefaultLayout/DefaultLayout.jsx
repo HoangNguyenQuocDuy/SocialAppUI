@@ -17,7 +17,7 @@ function DefaultLayout({ children }) {
         <Header />
         <div className={cx("container")}>
           <NavBar />
-          <div>{ children }</div>
+          { children }
         </div>
     </div>
   );

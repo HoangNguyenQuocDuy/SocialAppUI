@@ -1,5 +1,6 @@
 .wrapper {
     position: relative;
+    z-index: 10;
 
     &.small {
         width: 38px;
@@ -13,9 +14,26 @@
     &.middle {
         width: 140px;
         height: 140px;
-        
+
         .mainImg {
             border-radius: 10px;
+        }
+    }
+
+    &.circle {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        border: 4px solid var(--pink);
+
+        border-radius: 50%;
+
+        .mainImg {
+            width: 40px;
+            height: 40px;
+            padding: .1px;
+        }
+
+        &.viewed {
+            border-color: #f1ebeb;
         }
     }
 
@@ -28,9 +46,7 @@
         .sub-box {
             position: absolute;
 
-            .subImg{
-                
-            }
+            .subImg {}
         }
     }
 
