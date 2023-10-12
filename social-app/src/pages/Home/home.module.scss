@@ -4,19 +4,25 @@
     display: flex;
     justify-content: center;
     font-size: 1.6rem;
+    height: calc(100vh - 77px);
 
     .container {
         max-width: 1140px;
         width: 80%;
         display: flex;
         justify-content: space-between;
+        overflow-y: auto;
 
         .wrapper-left {
             padding: 0 15px;
             width: 75%;
 
-            .stories {
+            .stories, .posts {
                 margin-top: 18px;
+            }
+
+            .post {
+                margin-top: 25px;
             }
         }
     

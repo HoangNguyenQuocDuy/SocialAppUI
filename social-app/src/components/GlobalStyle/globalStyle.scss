@@ -8,16 +8,17 @@
 }
 
 :root {
-    --main-color-light: #F4F7FC; 
+    --main-color-light: #F4F7FC;
     --white: #fff;
-    --main-color-night: #190A33; 
+    --main-color-night: #190A33;
     --grey: #a3abb5;
     --grey-white: #eceff3;
-    --active-grey:#555;
+    --active-grey: #555;
+    --content-post-grey: #818e93;
     --pink: #D988B9;
     --nav-active-pink: rgba(217, 136, 185, .15);
-    --width-right-side-max: 28%;  
-    --width-right-side-min: 18%;  
+    --width-right-side-max: 28%;
+    --width-right-side-min: 18%;
     --green-active: #31a24c;
     --span-icon-width: 26px;
     --icon-hover: #333;
@@ -36,6 +37,7 @@ body {
 input {
     outline: none;
 }
+
 button {
     outline: none;
     border: none;
@@ -64,4 +66,23 @@ button {
 
 .tippy-content {
     font-weight: 600;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 8px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
 }

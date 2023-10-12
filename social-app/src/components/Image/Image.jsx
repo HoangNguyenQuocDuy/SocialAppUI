@@ -11,12 +11,14 @@ Image.propTypes = {
     active: ProTypes.bool,
     small: ProTypes.bool,
     middle: ProTypes.bool,
-    circle: ProTypes.bool
+    circle: ProTypes.bool,
+    viewed: ProTypes.bool,
+    avatarPost: ProTypes.bool
 };
 
-function Image({ mainImg, subImg, active, small, middle, circle }) {
+function Image({ mainImg, subImg, active, small, middle, circle, viewed, avatarPost }) {
     return (
-        <div className={cx('wrapper', { small, middle, circle })}>
+        <div className={cx('wrapper', { small, middle, circle, viewed, avatarPost })}>
             <span className={cx('box')}>
                 <img className={cx('mainImg')} src={mainImg} />
                 <span className={cx('sub-box', { active })}>

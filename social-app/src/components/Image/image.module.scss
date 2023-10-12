@@ -23,7 +23,6 @@
     &.circle {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
         border: 4px solid var(--pink);
-
         border-radius: 50%;
 
         .mainImg {
@@ -34,6 +33,16 @@
 
         &.viewed {
             border-color: #f1ebeb;
+        }
+
+        &.avatarPost {
+            border: none;
+            width: 44px;
+            height: 44px;
+            
+            img {
+                border-radius: 50%;
+            }
         }
     }
 
