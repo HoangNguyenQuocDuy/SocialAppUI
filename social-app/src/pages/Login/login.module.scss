@@ -1,0 +1,95 @@
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: url('~/assets/images/cute-cat.avif') 400px fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .container {
+        width: 860px;
+        height: 500px;
+        background-color: var(--main-color-light);
+        border-radius: 10px;
+        box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
+        font-size: 1.6rem;
+        position: relative;
+        display: flex;
+
+        .login-form {
+            padding: 70px 40px;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+
+            .title {
+                display: block;
+                font-size: 3.6rem;
+            }
+
+            label {
+                display: block;
+
+                input {
+                    border: none;
+                    outline: none;
+                    font-size: 1.8rem;
+                    padding: 14px 16px;
+                    border-radius: 20px;
+                    background-color: var(--main-color-light);
+                    box-shadow: var(--box-shadow-home-item);
+                    width: 100%;
+
+                }
+            }
+
+            .username {
+                margin: 40px 0 26px 0;
+            }
+
+            .btn-box {
+                display: flex;
+                width: 100%;
+                justify-content: center;
+
+                .login-btn {
+                    margin-top: 40px;
+                    font-size: 1.8rem;
+                    color: var(--white);
+                    background-color: var(--pink);
+                    border-radius: 10px;
+                    padding: 12px 26px;
+                    transition: .15s;
+                    box-shadow: var(--box-shadow-home-item);
+                    
+
+                    &:hover {
+                        background-color: var(--btn-active-pink);
+                    }
+                }
+            }
+
+        }
+
+        .image-box {
+            width: 54%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 80%;
+            }
+        }
+
+        .img-login {
+            position: absolute;
+            top: -80px;
+            z-index: 1;
+
+            img {
+                width: 160px;
+            }
+        }
+    }
+}
