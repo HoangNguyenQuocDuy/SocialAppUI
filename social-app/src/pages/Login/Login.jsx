@@ -4,38 +4,35 @@ import classnames from 'classnames/bind'
 import styles from './login.module.scss'
 import images from '~/assets/images';
 import { useState } from 'react';
-// import useFetchData from '~/components/customHooks/useFetchData';
-// import newRequet from '~/untils/request';
-// import axios from 'axios';
-import newRequet from '~/untils/request';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchUserData } from '~/store/slice/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { fetchLogin } from '~/store/slice/accountSlice';
 
 const cx = classnames.bind(styles)
 
 function Login() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-    // eslint-disable-next-line no-unused-vars
-  // const [isLoading, error, data] = useFetchData('users', '/users/')
-
-
+  console.log(useSelector((state) => state.account))
 
   const handleSubmitUser = async (e) => {
     e.preventDefault()
-    console.log('username: ', username)
-    console.log('password: ', password)
-    await  newRequet.post('/auth/login', {
-      username, password
-    })
-    .then(data => {
-      console.log(data.data)
-    })
-    .catch(err => {
-      console.log('err: ', err)
-    })
+    dispatch(fetchLogin({ username, password }))
+      .then(data => {
+        dispatch(fetchUserData(username))
+        navigate('/')
+        localStorage.setItem('accessToken', data.accessToken)
+      })
+
+      .catch(err => {
+        console.log('err: ', err)
+      })
   }
-
-
-
 
   return (
     <div className={cx('wrapper')}>

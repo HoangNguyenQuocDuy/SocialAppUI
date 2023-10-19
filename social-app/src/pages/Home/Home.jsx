@@ -4,10 +4,13 @@ import CreatePost from "~/components/CreatePost";
 import styles from './home.module.scss'
 import Stories from '~/components/Stories';
 import Post from '~/components/Post';
+import { useSelector } from 'react-redux';
 
 const cx = classnames.bind(styles)
 
 function Home() {
+console.log(useSelector((state) => state.user))
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>

@@ -24,12 +24,12 @@ function Post() {
                 <p className={cx('content')}>
                     The Empire State Building, it’s a must when in New York, so excited to go visit with my team this year!
                 </p>
-                <body className={cx('pics')}>
+                <div className={cx('pics')}>
                     <div className={cx('pic')}>
                         <img src={images.cat1} />
 
                     </div>
-                </body>
+                </div>
                 <footer className={cx('footer')}>
                     <span>
                         <span className={cx('like-box')}>
