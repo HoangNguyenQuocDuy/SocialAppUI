@@ -4,6 +4,8 @@ import { useRef, useState } from 'react';
 import styles from './CreatePost.module.scss'
 import HeadlessIcon from '../HeadlessIcon';
 import useAutosizeTextArea from '~/config/useAutosizeTextArea';
+import newRequet from '~/untils/request';
+// import { useSelector } from 'react-redux';
 
 const cx = classnames.bind(styles)
 
@@ -11,9 +13,40 @@ const cx = classnames.bind(styles)
 function CreatePost() {
     const [showIcon, setShowIcon] = useState(true)
     const [textareaValue, setTextareaValue] = useState("")
+    // const [token, setToken] = useState(useSelector(state =>))
     const textareaRef = useRef(null)
 
     useAutosizeTextArea(textareaRef.current, textareaValue)
+
+    // useEffect(() => {
+    //     setToken(localStorage.getItem('accessToken'))
+    // }, [])
+
+    const handleCreatePost = async () => {
+        const token = localStorage.getItem('accessToken')
+
+        // console.log('token: ', token )
+
+        await newRequet.post(
+            '/posts/save',
+            {
+                postImageUrls: ["./image142425/123", "./image142425/164", "./image142532/653"],
+                postDescription: "postDescription12352234124 d 3 212412 fa"
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }
+        ).then(data => {
+            console.log(data)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+        // console.log(post)
+    }
 
     return (
         <div className={cx('wrapper')}>
@@ -42,7 +75,7 @@ function CreatePost() {
                     <HeadlessIcon />
                     <textarea rows={1} onChange={(e) => { setTextareaValue(e.target.value) }} value={textareaValue} ref={textareaRef} placeholder='Write your thinking...' />
                 </div>
-                <button className={cx('submit-btn')}>Post</button>
+                <button onClick={handleCreatePost} className={cx('submit-btn')}>Post</button>
             </div>
         </div>
     );

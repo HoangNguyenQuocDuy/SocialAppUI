@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import newRequet from "~/untils/request"
 
@@ -15,6 +16,28 @@ export const fetchLogin = createAsyncThunk(
         })
 
         return response.data.body
+    }
+)
+
+export const fetchRefreshToken = createAsyncThunk(
+    'account/fetchRefreshToken',
+    async ({ refreshToken }) => {
+        // const response = await newRequet.post('/auth/refreshToken', {
+        //     refreshToken
+        // })
+
+        // console.log(response)
+
+        try {
+            const response = await newRequet.post('/auth/refreshToken', {
+                refreshToken
+            })
+            return response.data.data;
+        } catch (error) {
+            throw error;
+        }
+
+        // return response.data.data
     }
 )
 
@@ -40,6 +63,9 @@ export const accountSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchLogin.fulfilled, (state, action) => {
+            return action.payload
+        })
+        builder.addCase(fetchRefreshToken.fulfilled, (state, action) => {
             return action.payload
         })
     }
