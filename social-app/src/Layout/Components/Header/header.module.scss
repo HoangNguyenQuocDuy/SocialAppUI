@@ -83,6 +83,7 @@
         cursor: pointer;
         transition: .15s;
         padding: 14px 16px;
+        z-index: 100;
 
         &:hover {
             color: var(--pink);

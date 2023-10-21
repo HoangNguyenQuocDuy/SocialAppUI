@@ -8,6 +8,9 @@ import { useState } from 'react';
 import NavItem from '~/components/NavItem';
 import routers from '~/config/routers';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '~/store/slice/accountSlice';
+import { clearUser } from '~/store/slice/userSlice';
 
 const cx = classnames.bind(styles)
 
@@ -21,6 +24,14 @@ function Header() {
     email: 'quocduy@tanjirouu.com',
     imageUrl: images.tanjirou,
   } 
+
+  const dispatch = useDispatch();
+
+  const handleLogout = (e) => {
+    e.preventDefault()
+    dispatch(logout())
+    dispatch(clearUser())
+  }
   return (
     <header className={cx('wrapper')}>
       <Link to='/' className={cx('logo-box')}>
@@ -59,8 +70,8 @@ function Header() {
               <li>
                 <NavItem to={routers.profile} icon={<i className='isax-personalcard1'></i>} content='Your account' small />
               </li>
-              <li>
-                <NavItem to={routers.profile} icon={<i className='isax-logout-11'></i>} content='Log out' small />
+              <li onClick={handleLogout}>
+                <NavItem to={routers.home} icon={<i className='isax-logout-11'></i>} content='Log out' small />
               </li>
             </ul>
           </>
