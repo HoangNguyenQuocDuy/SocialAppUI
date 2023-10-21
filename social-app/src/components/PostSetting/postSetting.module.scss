@@ -1,0 +1,27 @@
+.wrapper {
+    font-size: 1.6rem;
+    background-color: var(--white);
+    padding: 6px 0;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow-home-item);
+
+
+    ul {
+
+        li {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: .15s;
+            color: var(--content-post-grey);
+
+            &:hover {
+                color: var(--pink);
+                background-color: var(--nav-active-pink);
+            }
+
+            i {
+                padding-right: 16px;
+            }
+        }
+    }
+}

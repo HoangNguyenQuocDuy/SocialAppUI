@@ -3,10 +3,16 @@ import classnames from 'classnames/bind'
 import styles from './post.module.scss'
 import images from '~/assets/images';
 import Image from '../Image/Image';
+import Tippy from '@tippyjs/react/headless';
+import { useState } from 'react';
+import PostSetting from '../PostSetting';
 
 const cx = classnames.bind(styles)
 
 function Post() {
+    const [showTippy, setShowTippy] = useState(false)
+
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -17,9 +23,21 @@ function Post() {
                         </span>
                         <span className={cx('username')}>Tanhirouuu</span>
                     </div>
-                    <div className={cx('detail')}>
-                        <i className="fa-solid fa-ellipsis"></i>
-                    </div>
+                    <Tippy
+                        render={attrs => (
+                            <PostSetting {...attrs} />
+                        )}
+                        content='duy'
+                        onClickOutside={() => setShowTippy(false)}
+                        interactive={true}
+                        
+                        visible={showTippy}
+                    >
+                        <div onClick={() => { setShowTippy((prev) => !prev) }} className={cx('detail')}>
+                            <i className="fa-solid fa-ellipsis"></i>
+                        </div>
+                    </Tippy>
+
                 </header>
                 <p className={cx('content')}>
                     The Empire State Building, it’s a must when in New York, so excited to go visit with my team this year!

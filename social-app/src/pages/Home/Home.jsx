@@ -4,12 +4,29 @@ import CreatePost from "~/components/CreatePost";
 import styles from './home.module.scss'
 import Stories from '~/components/Stories';
 import Post from '~/components/Post';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { fetchPostsData } from '~/store/slice/postSlice';
 
 const cx = classnames.bind(styles)
 
 function Home() {
-console.log(useSelector((state) => state.user))
+
+  const [posts, setPosts] = useState([])
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchPostsData())
+    .then(data => {
+      console.log('data from home page: ', data)
+      setPosts(posts)
+    })
+    .catch(err => {
+      console.log('Err when get posts: ', err)
+    })
+  }, [])
+
+  console.log(posts)
 
   return (
     <div className={cx('wrapper')}>

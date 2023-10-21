@@ -16,7 +16,6 @@ function HeadlessIcon() {
             render={attrs => (
                 <ListIcon {...attrs} />
             )}
-            content='duy'
             onClickOutside={() => setShowTippy(false)}
             visible={showTippy}
         >

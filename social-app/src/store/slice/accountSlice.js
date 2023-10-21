@@ -22,11 +22,6 @@ export const fetchLogin = createAsyncThunk(
 export const fetchRefreshToken = createAsyncThunk(
     'account/fetchRefreshToken',
     async ({ refreshToken }) => {
-        // const response = await newRequet.post('/auth/refreshToken', {
-        //     refreshToken
-        // })
-
-        // console.log(response)
 
         try {
             const response = await newRequet.post('/auth/refreshToken', {
@@ -52,6 +47,7 @@ export const accountSlice = createSlice({
             }
         },
         logout: () => {
+            localStorage.removeItem('accessToken')
             return initialState
         },
         refreshToken: (state, action) => {

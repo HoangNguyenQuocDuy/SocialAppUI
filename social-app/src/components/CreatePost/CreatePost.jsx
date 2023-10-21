@@ -13,19 +13,12 @@ const cx = classnames.bind(styles)
 function CreatePost() {
     const [showIcon, setShowIcon] = useState(true)
     const [textareaValue, setTextareaValue] = useState("")
-    // const [token, setToken] = useState(useSelector(state =>))
     const textareaRef = useRef(null)
 
     useAutosizeTextArea(textareaRef.current, textareaValue)
 
-    // useEffect(() => {
-    //     setToken(localStorage.getItem('accessToken'))
-    // }, [])
-
     const handleCreatePost = async () => {
         const token = localStorage.getItem('accessToken')
-
-        // console.log('token: ', token )
 
         await newRequet.post(
             '/posts/save',
@@ -44,8 +37,6 @@ function CreatePost() {
         .catch(err => {
             console.log(err)
         })
-
-        // console.log(post)
     }
 
     return (
