@@ -23,6 +23,7 @@ newRequet.interceptors.request.use(async config => {
                 isRefreshing = true
                 await store.dispatch(fetchRefreshToken({ refreshToken }))
                     .then(data => {
+                        console.log('refresh-token!!!!!!')
                         localStorage.setItem('accessToken', data.payload.accessToken)
                         config.headers.Authorization = `Bearer ${data.payload.accessToken}`
                     })

@@ -1,0 +1,19 @@
+.slick-slide>div {
+    cursor: default;
+    height: 100vh !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 0 !important;
+    height: 100% !important;
+    transition: transform 0.5s;
+    cursor: pointer;
+    background-color: rgb(0 0 0 / 30%)
+}
+
+// .slick-slide>div {
+
+// }

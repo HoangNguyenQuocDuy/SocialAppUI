@@ -6,11 +6,32 @@ import Image from '../Image/Image';
 import Tippy from '@tippyjs/react/headless';
 import { useState } from 'react';
 import PostSetting from '../PostSetting';
+import { useDispatch } from 'react-redux';
+import { setImgShowSlider, toggleOpenGallery } from '~/store/slice/appSlice';
 
 const cx = classnames.bind(styles)
 
 function Post() {
     const [showTippy, setShowTippy] = useState(false)
+    const dispatch = useDispatch()
+
+    const posts = [
+        { postImageUrls: [images.catFat, images.tanjirou, images.logo] },
+    ]
+
+    const handleOpenGallery = () => {
+        dispatch(toggleOpenGallery(true))
+    }
+
+    const handleClickLeftImg = () => {
+        handleOpenGallery()
+        dispatch(setImgShowSlider(0))
+    }
+
+    const handleClickRightImg = () => {
+        handleOpenGallery()
+        dispatch(setImgShowSlider(1))
+    }
 
 
     return (
@@ -30,7 +51,7 @@ function Post() {
                         content='duy'
                         onClickOutside={() => setShowTippy(false)}
                         interactive={true}
-                        
+
                         visible={showTippy}
                     >
                         <div onClick={() => { setShowTippy((prev) => !prev) }} className={cx('detail')}>
@@ -44,8 +65,22 @@ function Post() {
                 </p>
                 <div className={cx('pics')}>
                     <div className={cx('pic')}>
-                        <img src={images.cat1} />
+                        <div onClick={handleClickLeftImg} className={cx('img-box', { partly: posts[0].postImageUrls.length > 1 })}>
+                            <img src={posts[0].postImageUrls[0]} />
+                        </div>
 
+                        {
+                            posts[0].postImageUrls.length > 1 &&
+                            (
+                                // posts[0].postImageUrls.map((item, idx) => (
+                                <div onClick={handleClickRightImg} className={cx('img-box', { partly: posts[0].postImageUrls.length > 1 })}>
+                                    <img src={posts[0].postImageUrls[1]} />
+                                    <span className={cx('layer')}>
+                                        +2
+                                    </span>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
                 <footer className={cx('footer')}>

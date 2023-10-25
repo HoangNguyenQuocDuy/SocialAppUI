@@ -1,0 +1,48 @@
+.wrapper {
+    position: relative;
+    padding-left: 32px;
+    padding-right: 32px;
+
+}
+
+.slide {
+    margin: 0 auto;
+}
+
+.custom-arrows {
+    button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        border-radius: 999px;
+        color: var(--dark-grey);
+        background-color: #fff;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        opacity: 0.7;
+        transition: .25s;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .next {
+        right: 16px;
+    }
+    .back {
+        left: 16px;
+    }
+
+    .close {
+        top: 60px;
+        right: 40px;
+        opacity: 0.8;
+    }
+}
+

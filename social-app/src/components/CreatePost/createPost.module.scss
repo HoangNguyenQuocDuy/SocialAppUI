@@ -35,6 +35,10 @@
                 }
             }
 
+            input {
+                display: none;
+            }
+
             span {
                 padding-right: 10px;
                 transition: .25s;
@@ -97,6 +101,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding-bottom: 10px;
 
         .input-box {
             display: flex;
@@ -112,8 +117,11 @@
                 width: 100%;
                 line-height: 1.5;
                 margin-left: 30px;
-                width: 90%; 
+                width: 90%;
+                margin-right: 10px;
             }
+
+
         }
 
         .submit-btn {
@@ -124,10 +132,100 @@
             padding: 15px 30px;
             cursor: pointer;
             transition: .15s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             &:hover {
                 background-color: var(--btn-active-pink);
             }
+
+            &.isLoading {
+                cursor: no-drop;
+
+                &:hover {
+                    background-color: var(--pink);
+                }
+            }
+
+            i {
+                color: var(--active-grey);
+                font-size: 3rem;
+                position: absolute;
+                animation: spin infinite 1s;
+            }
+
+            @keyframes spin {
+                from {
+                    transform: rotate(0);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+    }
+
+    .img-box {
+        display: flex;
+        margin: 0 55px;
+        padding-bottom: 20px;
+        overflow: auto;
+        flex-wrap: wrap;
+
+        .img {
+            position: relative;
+            width: 16%;
+            height: 100px;
+            margin: 0 10px;
+
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: contain;
+            }
+
+            i {
+                position: absolute;
+                right: 8px;
+                top: 8px;
+                font-size: 1.2rem;
+                color: var(--content-post-grey);
+                cursor: pointer;
+                padding: 5px 5.5px;
+                transition: .15s;
+                border-radius: 50%;
+                background-color: rgba(224, 224, 224, .5);
+
+                &:hover {
+                    color: var(--icon-hover);
+                }
+            }
+        }
+    }
+}
+
+.loadding {
+    position: absolute;
+    animation: spin infinite 1s;
+    // top: 50%;
+    // transform: translateY(-50%);
+    top: 0;
+
+    i {
+        color: var(--content-post-grey);
+        font-size: 3rem;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0);
+        }
+
+        to {
+            transform: rotate(360deg);
         }
     }
 }

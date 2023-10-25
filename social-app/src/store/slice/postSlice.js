@@ -1,62 +1,66 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import newRequet from "~/untils/request";
-import { store } from "../store";
 
 
-const initialState = []
-
-// {
-//     postId: '',
-//     userId: '',
-//     likes: 0,
-//     postImageUrls: [],
-//     postDescription: '',
-//     createdAt: null,
-//     updatedAt: null
-// }
+const initialState = [
+]
 
 export const fetchPostsData = createAsyncThunk(
     'posts/fetchPostsData',
-    async () => {
-        const userId = store.getState().user.userId
+    async (page) => {
+        try {
 
-        await newRequet.get(`/posts/user/${userId}`)
-        .then(data => {
-            return data
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            const response = await newRequet.get(`/posts/?page=${page + 1}&size=${2}`);
+            return response.data.data;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 )
 
 export const postSlice = createSlice({
     name: 'posts',
     initialState,
-    reducer: {
-        like: (state) => {
-            state.likes += 1
+    reducers: {
+        like: (state, action) => {
+            const postId = action.payload
+            const post = state.find(post => post.id === postId)
 
-            return {
-                ...state
+            if (post) {
+                post.likes++
             }
         },
 
-        disLike: (state) => {
-            state.likes -= 1
+        disLike: (state, action) => {
+            const postId = action.payload
+            const post = state.find(post => post.id === postId)
 
-            return {
-                ...state
+            if (post && post.likes > 0) {
+                post.likes--
             }
+        },
+        resetPosts: () => {
+            return []
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchPostsData, (state, action) => {
-            return action.payload
+        builder.addCase(fetchPostsData.fulfilled, (state, action) => {
+            // console.log('action from fetch: ', action)
+            // const newPosts = action.payload.filter(
+            //     post => state.some(exittingPost => {
+            //         console.log('exittingPost: ', exittingPost)
+            //         console.log('post: ', post)
+            //         if (exittingPost.postId !== post.postId)
+            //             return post
+            //     })
+            // )
+            console.log('newPosts: ', action.payload)
+            return [...state, ...action.payload]
         })
     }
 })
 
-export const { like, disLike } = postSlice.actions
- 
+export const { like, disLike, resetPosts } = postSlice.actions
+
 export default postSlice.reducer
