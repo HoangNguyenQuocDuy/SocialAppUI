@@ -1,0 +1,22 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i {
+        color: var(--active-grey);
+        font-size: 3rem;
+        position: absolute;
+        animation: spin infinite 1s;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

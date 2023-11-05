@@ -17,17 +17,21 @@
             padding: 0 15px;
             width: 75%;
 
-            .stories, .posts {
+            .stories,
+            .posts {
                 margin-top: 18px;
             }
 
             .post {
                 margin-top: 25px;
             }
+            
         }
-    
+
         .wrapper-right {
             flex: 1;
         }
     }
+    
 }
+

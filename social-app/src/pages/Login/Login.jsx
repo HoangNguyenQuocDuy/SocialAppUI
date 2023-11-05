@@ -25,8 +25,8 @@ function Login() {
     dispatch(fetchLogin({ username, password }))
       .then(data => {
         dispatch(fetchUserData(username))
-        navigate('/')
         localStorage.setItem('accessToken', data.payload.accessToken)
+        navigate('/')
       })
 
       .catch(err => {

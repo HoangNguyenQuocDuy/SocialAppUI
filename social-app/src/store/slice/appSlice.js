@@ -43,14 +43,22 @@ export const appSlice = createSlice({
                 initialSlide: action.payload
             }
             return { ...state, settingSlide: { ...newSetting } }
+        },
+        setGalleryImgs: (state, action) => {
+            return {
+                ...state,
+                galleryImgs: action.payload
+            }
         }
 
     },
-    extraReducers: {
+    extraReducers:(builder) => {
 
     }
 })
 
 export default appSlice.reducer
 
-export const { toggleOpenGallery, handleOpenGalleryByAction, toggleTheme, addImgToGallerry, setImgShowSlider } = appSlice.actions
+export const { toggleOpenGallery, handleOpenGalleryByAction, 
+    toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs } 
+    = appSlice.actions

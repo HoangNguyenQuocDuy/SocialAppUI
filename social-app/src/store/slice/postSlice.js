@@ -7,10 +7,11 @@ const initialState = [
 
 export const fetchPostsData = createAsyncThunk(
     'posts/fetchPostsData',
+    // eslint-disable-next-line no-unused-vars
     async (page) => {
         try {
-
-            const response = await newRequet.get(`/posts/?page=${page + 1}&size=${2}`);
+            // /posts/?page=${page}&size=${2}
+            const response = await newRequet.get(`/posts/`);
             return response.data.data;
         } catch (err) {
             console.log(err);
@@ -24,43 +25,60 @@ export const postSlice = createSlice({
     initialState,
     reducers: {
         like: (state, action) => {
-            const postId = action.payload
-            const post = state.find(post => post.id === postId)
+            const postId = action.payload.postId
+            const post = state.find(post => post.postId === postId)
+            console.log(post)
 
             if (post) {
-                post.likes++
+                const updatePost = {
+                    ...post,
+                    likes: post.likes+1
+                }
+
+                const updatePosts = state.map(post =>
+                    post.postId === postId ? updatePost : post
+                )
+                return [...updatePosts]
             }
+
+            return state
         },
 
         disLike: (state, action) => {
-            const postId = action.payload
-            const post = state.find(post => post.id === postId)
+            const postId = action.payload.postId
+            const post = state.find(post => post.postId === postId)
 
-            if (post && post.likes > 0) {
-                post.likes--
+            if (post) {
+                const updatePost = {
+                    ...post,
+                    likes: post.likes-1
+                }
+
+                const updatePosts = state.map(post =>
+                    post.postId === postId ? updatePost : post
+                )
+                return [...updatePosts]
             }
+
+            return state
         },
         resetPosts: () => {
             return []
+        },
+        deletePost: (state, action) => {
+            return state.filter(post => post.postId !== action.payload)
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchPostsData.fulfilled, (state, action) => {
-            // console.log('action from fetch: ', action)
-            // const newPosts = action.payload.filter(
-            //     post => state.some(exittingPost => {
-            //         console.log('exittingPost: ', exittingPost)
-            //         console.log('post: ', post)
-            //         if (exittingPost.postId !== post.postId)
-            //             return post
-            //     })
-            // )
-            console.log('newPosts: ', action.payload)
             return [...state, ...action.payload]
         })
+        // builder.addCase(deletePost.fulfilled, (state, action) => {
+        //         // return state.filter(post => post.postId !== action.payload.postId)
+        // }),
     }
 })
 
-export const { like, disLike, resetPosts } = postSlice.actions
+export const { like, disLike, resetPosts, deletePost } = postSlice.actions
 
 export default postSlice.reducer

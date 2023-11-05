@@ -1,37 +1,126 @@
 import classnames from 'classnames/bind'
+import PropType from 'prop-types'
 
 import styles from './post.module.scss'
 import images from '~/assets/images';
 import Image from '../Image/Image';
 import Tippy from '@tippyjs/react/headless';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PostSetting from '../PostSetting';
-import { useDispatch } from 'react-redux';
-import { setImgShowSlider, toggleOpenGallery } from '~/store/slice/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGalleryImgs, setImgShowSlider, toggleOpenGallery } from '~/store/slice/appSlice';
+import moment from 'moment/moment';
+import newRequet from '~/untils/request';
+import { disLike, like } from '~/store/slice/postSlice';
 
 const cx = classnames.bind(styles)
 
-function Post() {
+Post.propTypes = {
+    post: PropType.any
+}
+
+function Post({ post }) {
     const [showTippy, setShowTippy] = useState(false)
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
 
-    const posts = [
-        { postImageUrls: [images.catFat, images.tanjirou, images.logo] },
-    ]
+    console.log(post)
+
+    const [timeSet, setTimeSet] = useState('')
+    const [isLike, setIsLike] = useState(false)
+    const token = localStorage.getItem('accessToken')
 
     const handleOpenGallery = () => {
-        dispatch(toggleOpenGallery(true))
+        dispatch(toggleOpenGallery())
     }
 
     const handleClickLeftImg = () => {
         handleOpenGallery()
+        dispatch(setGalleryImgs(post.postImageUrls))
         dispatch(setImgShowSlider(0))
     }
 
     const handleClickRightImg = () => {
         handleOpenGallery()
+        dispatch(setGalleryImgs(post.postImageUrls))
         dispatch(setImgShowSlider(1))
     }
+
+    const validateTime = (time) => {
+        const now = moment()
+        const createAtMoment = moment(time)
+
+        const duration = moment.duration(now.diff(createAtMoment))
+
+        const days = duration._data.days;
+        const hours = duration._data.hours;
+        const minutes = duration._data.minutes;
+        const seconds = duration._data.seconds;
+
+        if (days > 0) {
+            if (days > 1) {
+                setTimeSet(`${days} days ago`)
+            } else {
+                setTimeSet(`${days} day ago`)
+            }
+        } else if (hours > 0) {
+            if (hours > 1) {
+                setTimeSet(`${hours} hours ago`)
+            } else {
+                setTimeSet(`${hours} hour ago`)
+            }
+        } else if (minutes > 0) {
+            if (minutes > 1) {
+                setTimeSet(`${minutes} minutes ago`)
+            } else {
+                setTimeSet(`${minutes} minite ago`)
+            }
+        } else {
+            if (seconds > 1) {
+                setTimeSet(`${seconds} seconds ago`)
+            } else {
+                setTimeSet(`${seconds} second ago`)
+            }
+        }
+    }
+
+    const handleLikePost = async () => {
+        setIsLike(!isLike)
+        console.log('token: ', token)
+        console.log('post: ', post.postId)
+        await newRequet.put(`/posts/update/${post.postId}/like`, {}, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        .then(data => {
+            console.log(data.data.data)
+            if (!isLike) {
+                dispatch(like(post))
+            } else {
+                dispatch(disLike(post))
+            }
+        })
+        .catch(e => {
+            console.log("Error when like this post: ", e)
+        })
+    }
+
+    const handleCheckLikeByUser = () => {
+        if (post.likedByUser) {
+            for (let i = 0; i < post.likedByUser.length; i++) {
+                if (post.likedByUser[i].userId === user.userId) {
+                    setIsLike(true)
+                    break
+                }
+            }
+        }
+    }
+
+    useEffect(() => {
+        validateTime(post.createdAt)
+        handleCheckLikeByUser()
+    }, [])
 
 
     return (
@@ -44,39 +133,39 @@ function Post() {
                         </span>
                         <span className={cx('username')}>Tanhirouuu</span>
                     </div>
-                    <Tippy
-                        render={attrs => (
-                            <PostSetting {...attrs} />
-                        )}
-                        content='duy'
-                        onClickOutside={() => setShowTippy(false)}
-                        interactive={true}
+                    {post.userId === user.userId &&
+                        <Tippy
+                            render={attrs => (
+                                <PostSetting postId={post.postId} {...attrs} />
+                            )}
+                            content='duy'
+                            onClickOutside={() => setShowTippy(false)}
+                            interactive={true}
 
-                        visible={showTippy}
-                    >
-                        <div onClick={() => { setShowTippy((prev) => !prev) }} className={cx('detail')}>
-                            <i className="fa-solid fa-ellipsis"></i>
-                        </div>
-                    </Tippy>
+                            visible={showTippy}
+                        >
+                            <div onClick={() => { setShowTippy((prev) => !prev) }} className={cx('detail')}>
+                                <i className="fa-solid fa-ellipsis"></i>
+                            </div>
+                        </Tippy>}
 
                 </header>
                 <p className={cx('content')}>
-                    The Empire State Building, it’s a must when in New York, so excited to go visit with my team this year!
+                    {post.postDescription}
                 </p>
                 <div className={cx('pics')}>
                     <div className={cx('pic')}>
-                        <div onClick={handleClickLeftImg} className={cx('img-box', { partly: posts[0].postImageUrls.length > 1 })}>
-                            <img src={posts[0].postImageUrls[0]} />
+                        <div onClick={handleClickLeftImg} className={cx('img-box', { partly: post.postImageUrls.length > 1 })}>
+                            <img src={post.postImageUrls[0]} />
                         </div>
 
                         {
-                            posts[0].postImageUrls.length > 1 &&
+                            post.postImageUrls.length > 1 &&
                             (
-                                // posts[0].postImageUrls.map((item, idx) => (
-                                <div onClick={handleClickRightImg} className={cx('img-box', { partly: posts[0].postImageUrls.length > 1 })}>
-                                    <img src={posts[0].postImageUrls[1]} />
-                                    <span className={cx('layer')}>
-                                        +2
+                                <div onClick={handleClickRightImg} className={cx('img-box', { partly: post.postImageUrls.length > 1 })}>
+                                    <img src={post.postImageUrls[1]} />
+                                    <span className={cx({ 'layer': post.postImageUrls.length > 2 })}>
+                                        {post.postImageUrls.length > 2 && `+${post.postImageUrls.length - 2}`}
                                     </span>
                                 </div>
                             )
@@ -86,8 +175,8 @@ function Post() {
                 <footer className={cx('footer')}>
                     <span>
                         <span className={cx('like-box')}>
-                            <i className={cx('isax-heart1')}></i>
-                            <span className={cx('likes-count')}>123</span>
+                            <i onClick={handleLikePost} className={cx('isax-heart1', { isLike })}></i>
+                            <span className={cx('likes-count')}>{post.likes}</span>
                         </span>
                         <span className={cx('comment-box')}>
                             <i className="fa-regular fa-comment"></i>
@@ -95,7 +184,7 @@ function Post() {
                         </span>
                     </span>
                     <span className={cx('time-post')}>
-                        4h ago
+                        {timeSet}
                     </span>
                 </footer>
             </div>

@@ -62,19 +62,7 @@ function CreatePost() {
         setIsLoading(true)
         const response = await newRequet.post(
             '/cloudinary/uploadMultipleFiles',
-            formData,
-            await newRequet.post(
-                '/posts/save',
-                {
-                    postImageUrls: ["./image142425/123", "./image142425/164", "./image142532/653"],
-                    postDescription: "postDescription12352234124 d 3 212412 fa"
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                }
-            ))
+            formData)
         setimagesSelectors(prev => [...prev, ...response.data.data])
         setIsLoading(false)
     }
@@ -85,61 +73,55 @@ function CreatePost() {
 
     const handleDeleteImageSelector = (image) => {
         setimagesSelectors(prev => prev.filter(item => item != image))
-        .then(data => {
-            console.log(data)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-}
+    }
 
-return (
-    <div className={cx('wrapper')}>
-        <div className={cx('box-icons')}>
-            <div className={cx('icons')}>
-                <span onClick={() => { setShowIcon(!showIcon) }} className={cx('plus-icon', { active: showIcon })}>
-                    <i className="fa-solid fa-plus"></i>
-                </span>
-                <span className={cx({ hide: !showIcon })}>
-                    <i className='isax-link-211'></i>
-                </span>
-                <span onClick={handleClickIcon} className={cx({ hide: !showIcon })}>
-                    <i className='isax-image1'></i>
-                    <input multiple accept='image/*' ref={inputFileRef} type="file" onChange={(e) => { handleInputFiles(e) }} />
-                </span>
-                <span className={cx({ hide: !showIcon })}>
-                    <i className="fa-solid fa-list"></i>
-                </span>
-                <span className={cx({ hide: !showIcon })}>
-                    <i className='isax-camera1'></i>
-                </span>
-            </div>
-            <div className={cx('border')}></div>
-        </div>
-        <div className={cx('box-create')}>
-            <div className={cx('input-box')}>
-                <HeadlessIcon />
-                <textarea rows={1} onChange={(e) => { setTextareaValue(e.target.value) }} value={textareaValue} ref={textareaRef} placeholder='Write your thinking...' />
-            </div>
-            <div>
-                <button onClick={handleCreatePost} className={cx('submit-btn', { isLoading })}>
-                    Post
-                    {isLoading && <i className="fa-solid fa-spinner"></i>}
-                </button>
-            </div>
-        </div>
-        <div className={cx("img-box")}>
-            {
-                imagesSelectors.map((item, idx) => (
-                    <span key={idx} className={cx('img')}>
-                        <img src={item.url} />
-                        <i onClick={() => { handleDeleteImageSelector(item) }} className="fa-solid fa-x"></i>
+    return (
+        <div className={cx('wrapper')}>
+            <div className={cx('box-icons')}>
+                <div className={cx('icons')}>
+                    <span onClick={() => { setShowIcon(!showIcon) }} className={cx('plus-icon', { active: showIcon })}>
+                        <i className="fa-solid fa-plus"></i>
                     </span>
-                ))
-            }
+                    <span className={cx({ hide: !showIcon })}>
+                        <i className='isax-link-211'></i>
+                    </span>
+                    <span onClick={handleClickIcon} className={cx({ hide: !showIcon })}>
+                        <i className='isax-image1'></i>
+                        <input multiple accept='image/*' ref={inputFileRef} type="file" onChange={(e) => { handleInputFiles(e) }} />
+                    </span>
+                    <span className={cx({ hide: !showIcon })}>
+                        <i className="fa-solid fa-list"></i>
+                    </span>
+                    <span className={cx({ hide: !showIcon })}>
+                        <i className='isax-camera1'></i>
+                    </span>
+                </div>
+                <div className={cx('border')}></div>
+            </div>
+            <div className={cx('box-create')}>
+                <div className={cx('input-box')}>
+                    <HeadlessIcon />
+                    <textarea rows={1} onChange={(e) => { setTextareaValue(e.target.value) }} value={textareaValue} ref={textareaRef} placeholder='Write your thinking...' />
+                </div>
+                <div>
+                    <button onClick={handleCreatePost} className={cx('submit-btn', { isLoading })}>
+                        Post
+                        {isLoading && <i className="fa-solid fa-spinner"></i>}
+                    </button>
+                </div>
+            </div>
+            <div className={cx("img-box")}>
+                {
+                    imagesSelectors.map((item, idx) => (
+                        <span key={idx} className={cx('img')}>
+                            <img src={item.url} />
+                            <i onClick={() => { handleDeleteImageSelector(item) }} className="fa-solid fa-x"></i>
+                        </span>
+                    ))
+                }
+            </div>
         </div>
-    </div>
-);
+    );
 }
 
 export default CreatePost;

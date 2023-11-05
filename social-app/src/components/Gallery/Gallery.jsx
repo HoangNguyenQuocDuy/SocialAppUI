@@ -8,7 +8,6 @@ import { useEffect, useRef } from 'react';
 import "./slide.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { handleOpenGalleryByAction } from '~/store/slice/appSlice';
-import images from '~/assets/images';
 
 
 const cx = classnames.bind(styles)
@@ -17,7 +16,7 @@ function Gallery() {
     const sliderRef = useRef()
     const imgRef = useRef()
     const dispatch = useDispatch()
-    const imageUrls=[images.catFat, images.tanjirou, images.logo]
+    const app = useSelector(state => state.app)
 
     const handlePressESC = (e) => {
         if (e.keyCode === 27) dispatch(handleOpenGalleryByAction(false));
@@ -34,7 +33,6 @@ function Gallery() {
             dispatch(handleOpenGalleryByAction(false));
         }
     };
-    const app = useSelector(state => state.app)
 
     useEffect(() => {
         window.addEventListener("keydown", handlePressESC);
@@ -49,14 +47,7 @@ function Gallery() {
     const handleClickCloseBtn = () => {
 
     }
-
-    // const settings = {
-    //     infinite: "true",
-    //     speed: 500,
-    //     slidetoshow: 1,
-    //     slidestoscroll: 1,
-    //     initialSlide: 
-    // };
+    
     return (
         <div className="wrapper">
             <div className={cx('container')}>
@@ -65,7 +56,7 @@ function Gallery() {
                     {...app.settingSlide} 
                 >
                     {
-                        imageUrls.map((imageUrl, idx) => (
+                        app.galleryImgs.map((imageUrl, idx) => (
                             <span className={cx('img-box')} key={idx}>
                                 <img name='img' ref={imgRef} src={imageUrl} />
                             </span>
