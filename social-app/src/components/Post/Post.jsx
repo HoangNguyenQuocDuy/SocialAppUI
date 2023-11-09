@@ -20,11 +20,11 @@ Post.propTypes = {
 }
 
 function Post({ post }) {
-    const [showTippy, setShowTippy] = useState(false)
     const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
+    const { userId } = useSelector(state => state.user)
+    const { isShowPostTippy, isOpenConfirmBox } = useSelector(state => state.app)
 
-    console.log(post)
+    const [isShowTippy, setIsShowTippy] = useState(isShowPostTippy)
 
     const [timeSet, setTimeSet] = useState('')
     const [isLike, setIsLike] = useState(false)
@@ -109,7 +109,7 @@ function Post({ post }) {
     const handleCheckLikeByUser = () => {
         if (post.likedByUser) {
             for (let i = 0; i < post.likedByUser.length; i++) {
-                if (post.likedByUser[i].userId === user.userId) {
+                if (post.likedByUser[i].userId === userId) {
                     setIsLike(true)
                     break
                 }
@@ -120,7 +120,11 @@ function Post({ post }) {
     useEffect(() => {
         validateTime(post.createdAt)
         handleCheckLikeByUser()
-    }, [])
+
+        if (!isOpenConfirmBox) {
+            setIsShowTippy(false)
+        } 
+    }, [isOpenConfirmBox])
 
 
     return (
@@ -133,18 +137,18 @@ function Post({ post }) {
                         </span>
                         <span className={cx('username')}>Tanhirouuu</span>
                     </div>
-                    {post.userId === user.userId &&
+                    {post.userId === userId &&
                         <Tippy
                             render={attrs => (
                                 <PostSetting postId={post.postId} {...attrs} />
                             )}
                             content='duy'
-                            onClickOutside={() => setShowTippy(false)}
+                            // onClickOutside={() => { dispatch(setIsShowPostTippy(false)) }}
                             interactive={true}
 
-                            visible={showTippy}
+                            visible={isShowTippy && !isOpenConfirmBox}
                         >
-                            <div onClick={() => { setShowTippy((prev) => !prev) }} className={cx('detail')}>
+                            <div onClick={() => { setIsShowTippy(prev => !prev) }} className={cx('detail')}>
                                 <i className="fa-solid fa-ellipsis"></i>
                             </div>
                         </Tippy>}
@@ -193,3 +197,4 @@ function Post({ post }) {
 }
 
 export default Post;
+

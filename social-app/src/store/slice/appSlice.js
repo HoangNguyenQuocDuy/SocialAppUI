@@ -10,7 +10,11 @@ const initialState = {
         slidetoshow: 1,
         slidestoscroll: 1,
         initialSlide: 0
-    }
+    },
+    isOpenConfirmBox: false,
+    isShowPostTippy: false,
+    postIdWillBeDeleted: null,
+    isShowAnnounce: false,
 
 }
 
@@ -49,9 +53,33 @@ export const appSlice = createSlice({
                 ...state,
                 galleryImgs: action.payload
             }
+        },
+        setIsOpenConfirmBox: (state, action) => {
+            return {
+                ...state,
+                isOpenConfirmBox: action.payload
+            }
+        },
+        setIsShowPostTippy: (state, action) => {
+            return {
+                ...state,
+                isShowPostTippy: action.payload
+            }
+        },
+        setPostIdWillBeDeleted: (state, action) => {
+            return {
+                ...state,
+                postIdWillBeDeleted: action.payload
+            }
+        },
+        setIsShowAnnounce: (state, action) => {
+            return {
+                ...state,
+                isShowAnnounce: action.payload
+            }
         }
-
     },
+    // eslint-disable-next-line no-unused-vars
     extraReducers:(builder) => {
 
     }
@@ -60,5 +88,6 @@ export const appSlice = createSlice({
 export default appSlice.reducer
 
 export const { toggleOpenGallery, handleOpenGalleryByAction, 
-    toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs } 
+    toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs, setIsOpenConfirmBox,
+    setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce } 
     = appSlice.actions

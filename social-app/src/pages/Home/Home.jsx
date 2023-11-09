@@ -1,23 +1,27 @@
 import classnames from 'classnames/bind'
 // import InfiniteScroll from 'react-infinite-scroll-component';
 
-import CreatePost from "~/components/CreatePost";
 import styles from './home.module.scss'
 import Stories from '~/components/Stories';
 import Post from '~/components/Post';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchPostsData, resetPosts } from '~/store/slice/postSlice';
 import Gallery from '~/components/Gallery';
-// import LoadBox from '~/components/LoadBox/LoadBox';
+import ConfirmBox from '~/components/ConfirmBox/ConfirmBox';
+import Announce from '~/components/Announce/Announce';
+import CreatePost from '~/components/CreatePost';
+import { setIsOpenConfirmBox, setIsShowAnnounce } from '~/store/slice/appSlice';
 
 const cx = classnames.bind(styles)
 
 function Home() {
 
   const dispatch = useDispatch()
-  const app = useSelector(state => state.app)
+  const { isOpenGallery, isOpenConfirmBox, postIdWillBeDeleted, isShowAnnounce } = useSelector(state => state.app)
   const containerRef = useRef()
+
+  const messageDeletePostSuccessful = 'This post is deleting ...'
   // const [page, setPage] = useState(0)
   // const [hasMore, setHasMore] = useState(true);
   const posts = useSelector(state => state.posts)
@@ -38,14 +42,28 @@ function Home() {
   //   }
   // };
 
-  console.log(posts)
+  // console.log(posts)
   useEffect(() => {
-    dispatch(resetPosts())
     // if (posts.length == 0) {
     //   fetchMorePosts()
-    dispatch(fetchPostsData())
     // }
-  }, [])
+
+    if (isOpenConfirmBox) {
+      dispatch(setIsOpenConfirmBox(false))
+    }
+
+    if (postIdWillBeDeleted === '') {
+      const timer = setTimeout(() => {
+        dispatch(setIsShowAnnounce(false))
+      }, 3000);
+
+      // Xóa timer khi component unmount hoặc khi thông báo thay đổi
+      return () => clearTimeout(timer);
+    } else {
+      dispatch(resetPosts())
+      dispatch(fetchPostsData())
+    }
+  }, [isShowAnnounce])
 
   return (
     <div className={cx('wrapper')}>
@@ -63,11 +81,11 @@ function Home() {
               loader={<LoadBox />}
               endMessage={<p>No more posts</p>}
             > */}
-              {posts.map((post, idx) => (
-                <div key={idx} className={cx('post')}>
-                  <Post post={post} />
-                </div>
-              ))}
+            {posts.map((post, idx) => (
+              <div key={idx} className={cx('post')}>
+                <Post post={post} />
+              </div>
+            ))}
             {/* </InfiniteScroll> */}
           </div>
         </aside>
@@ -75,8 +93,9 @@ function Home() {
 
         </aside>
       </div>
-      {app.isOpenGallery && <Gallery />}
-
+      {isOpenGallery && <Gallery />}
+      {isOpenConfirmBox && <ConfirmBox />}
+      {postIdWillBeDeleted === '' && isShowAnnounce && <Announce message={messageDeletePostSuccessful} />}
     </div>
   );
 }

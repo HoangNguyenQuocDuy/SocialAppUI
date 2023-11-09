@@ -17,7 +17,6 @@ function CreatePost() {
     const [isLoading, setIsLoading] = useState(false)
     const textareaRef = useRef(null)
 
-
     useAutosizeTextArea(textareaRef.current, textareaValue)
 
     const handleCreatePost = async () => {
