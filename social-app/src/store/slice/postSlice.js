@@ -67,6 +67,25 @@ export const postSlice = createSlice({
         },
         deletePost: (state, action) => {
             return state.filter(post => post.postId !== action.payload)
+        },
+        updatePost: (state, action) => {
+            const postId = action.payload.postId
+            const post = state.find(post => post.postId === postId)
+
+            if (post) {
+                const updatePost = {
+                    ...post,
+                    postImageUrls: post.postImageUrls,
+                    postDescription: post.postDescription
+                }
+
+                const updatePosts = state.map(post =>
+                    post.postId === postId ? updatePost : post
+                )
+                return [...updatePosts]
+            }
+
+            return state
         }
     },
     extraReducers: (builder) => {
@@ -79,6 +98,6 @@ export const postSlice = createSlice({
     }
 })
 
-export const { like, disLike, resetPosts, deletePost } = postSlice.actions
+export const { like, disLike, resetPosts, deletePost, updatePost } = postSlice.actions
 
 export default postSlice.reducer

@@ -14,6 +14,34 @@
         padding-bottom: 15px;
         border-bottom: 1px solid var(--grey-white);
 
+        .wrapper-flex {
+            display: flex;
+            justify-content: space-between;
+
+            .cancel-btn {
+                font-size: 1.6rem;
+                color: var(--white);
+                background-color: var(--pink);
+                border-radius: 10px;
+                padding: 15px 30px;
+                cursor: pointer;
+                transition: .15s;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+    
+                &:hover {
+                    background-color: var(--btn-active-pink);
+                }
+
+                &.prevent {
+                    cursor: not-allowed;
+                    pointer-events: none;
+                }
+            }
+        }
+
         .icons {
             display: flex;
             align-items: center;
@@ -143,6 +171,7 @@
 
             &.isLoading {
                 cursor: no-drop;
+                pointer-events: none;
 
                 &:hover {
                     background-color: var(--pink);

@@ -1,18 +1,16 @@
 import classnames from "classnames/bind";
-import Proptype from 'prop-types'
 
 import styles from './announce.module.scss'
+import { useSelector } from "react-redux";
 
 const cx = classnames.bind(styles)
 
-Announce.propTypes = {
-    message: Proptype.string
-}
+function Announce() {
+    const { messageAnnounce } = useSelector(state => state.app)
 
-function Announce({ message }) {
     return ( 
         <section className={cx('wrapper')}>
-            {message}
+            {messageAnnounce}
         </section>
      );
 }

@@ -8,7 +8,7 @@ import Tippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
 import PostSetting from '../PostSetting';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGalleryImgs, setImgShowSlider, toggleOpenGallery } from '~/store/slice/appSlice';
+import { setGalleryImgs, setImgShowSlider, setIsShowPostTippy, toggleOpenGallery } from '~/store/slice/appSlice';
 import moment from 'moment/moment';
 import newRequet from '~/untils/request';
 import { disLike, like } from '~/store/slice/postSlice';
@@ -22,7 +22,7 @@ Post.propTypes = {
 function Post({ post }) {
     const dispatch = useDispatch()
     const { userId } = useSelector(state => state.user)
-    const { isShowPostTippy, isOpenConfirmBox } = useSelector(state => state.app)
+    const { isShowPostTippy, isOpenConfirmBox, isUpdatingPost } = useSelector(state => state.app)
 
     const [isShowTippy, setIsShowTippy] = useState(isShowPostTippy)
 
@@ -121,10 +121,10 @@ function Post({ post }) {
         validateTime(post.createdAt)
         handleCheckLikeByUser()
 
-        if (!isOpenConfirmBox) {
+        if (!isOpenConfirmBox || isUpdatingPost) {
             setIsShowTippy(false)
         } 
-    }, [isOpenConfirmBox])
+    }, [isOpenConfirmBox, isUpdatingPost])
 
 
     return (
@@ -140,13 +140,13 @@ function Post({ post }) {
                     {post.userId === userId &&
                         <Tippy
                             render={attrs => (
-                                <PostSetting postId={post.postId} {...attrs} />
+                                <PostSetting post={post} {...attrs} />
                             )}
                             content='duy'
-                            // onClickOutside={() => { dispatch(setIsShowPostTippy(false)) }}
+                            onClickOutside={() => { dispatch(setIsShowPostTippy(false)) }}
                             interactive={true}
 
-                            visible={isShowTippy && !isOpenConfirmBox}
+                            visible={(isShowTippy && !isOpenConfirmBox) || (isShowTippy && isUpdatingPost)}
                         >
                             <div onClick={() => { setIsShowTippy(prev => !prev) }} className={cx('detail')}>
                                 <i className="fa-solid fa-ellipsis"></i>

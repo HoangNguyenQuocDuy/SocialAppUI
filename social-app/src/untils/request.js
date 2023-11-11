@@ -37,6 +37,7 @@ newRequet.interceptors.request.use(async config => {
         }
     }
 
+    delete config.headers['Expect'];
     return config
 })
 

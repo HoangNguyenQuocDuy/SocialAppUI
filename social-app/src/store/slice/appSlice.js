@@ -15,7 +15,10 @@ const initialState = {
     isShowPostTippy: false,
     postIdWillBeDeleted: null,
     isShowAnnounce: false,
-
+    isUpdatingPost: false,
+    isShowCancelBox: false,
+    postWillBeUpdated: null,
+    messageAnnounce: '',
 }
 
 
@@ -77,7 +80,32 @@ export const appSlice = createSlice({
                 ...state,
                 isShowAnnounce: action.payload
             }
-        }
+        },
+        setIsUpdatingPost: (state, action) => {
+            return {
+                ...state,
+                isUpdatingPost: action.payload
+            }
+        },
+        setPostWillBeUpdated: (state, action) => {
+
+            return {
+                ...state, 
+                postWillBeUpdated: action.payload
+            }
+        },
+        setIsShowCancelBox: (state, action) => {
+            return {
+                ...state, 
+                isShowCancelBox: action.payload
+            }
+        },
+        setMessageAnnounce: (state, action) => {
+            return {
+                ...state, 
+                messageAnnounce: action.payload
+            }
+        },
     },
     // eslint-disable-next-line no-unused-vars
     extraReducers:(builder) => {
@@ -89,5 +117,6 @@ export default appSlice.reducer
 
 export const { toggleOpenGallery, handleOpenGalleryByAction, 
     toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs, setIsOpenConfirmBox,
-    setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce } 
+    setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce,
+    setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce } 
     = appSlice.actions
