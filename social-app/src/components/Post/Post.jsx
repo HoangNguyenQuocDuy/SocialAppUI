@@ -8,10 +8,11 @@ import Tippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
 import PostSetting from '../PostSetting';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGalleryImgs, setImgShowSlider, setIsShowPostTippy, toggleOpenGallery } from '~/store/slice/appSlice';
-import moment from 'moment/moment';
+import { setGalleryImgs, setImgShowSlider, setIsOpenCommentBox, setIsShowPostTippy, setPostComment, toggleOpenGallery } from '~/store/slice/appSlice';
 import newRequet from '~/untils/request';
 import { disLike, like } from '~/store/slice/postSlice';
+import { fetchCommentByPostId, resetComments } from '~/store/slice/commentSlice';
+import { validateTime } from '~/untils/validateTime';
 
 const cx = classnames.bind(styles)
 
@@ -23,6 +24,7 @@ function Post({ post }) {
     const dispatch = useDispatch()
     const { userId } = useSelector(state => state.user)
     const { isShowPostTippy, isOpenConfirmBox, isUpdatingPost } = useSelector(state => state.app)
+    const [ commentsCount, setCommentsCount] = useState([])
 
     const [isShowTippy, setIsShowTippy] = useState(isShowPostTippy)
 
@@ -46,64 +48,24 @@ function Post({ post }) {
         dispatch(setImgShowSlider(1))
     }
 
-    const validateTime = (time) => {
-        const now = moment()
-        const createAtMoment = moment(time)
-
-        const duration = moment.duration(now.diff(createAtMoment))
-
-        const days = duration._data.days;
-        const hours = duration._data.hours;
-        const minutes = duration._data.minutes;
-        const seconds = duration._data.seconds;
-
-        if (days > 0) {
-            if (days > 1) {
-                setTimeSet(`${days} days ago`)
-            } else {
-                setTimeSet(`${days} day ago`)
-            }
-        } else if (hours > 0) {
-            if (hours > 1) {
-                setTimeSet(`${hours} hours ago`)
-            } else {
-                setTimeSet(`${hours} hour ago`)
-            }
-        } else if (minutes > 0) {
-            if (minutes > 1) {
-                setTimeSet(`${minutes} minutes ago`)
-            } else {
-                setTimeSet(`${minutes} minite ago`)
-            }
-        } else {
-            if (seconds > 1) {
-                setTimeSet(`${seconds} seconds ago`)
-            } else {
-                setTimeSet(`${seconds} second ago`)
-            }
-        }
-    }
-
     const handleLikePost = async () => {
         setIsLike(!isLike)
-        console.log('token: ', token)
-        console.log('post: ', post.postId)
         await newRequet.put(`/posts/update/${post.postId}/like`, {}, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
         })
-        .then(data => {
-            console.log(data.data.data)
-            if (!isLike) {
-                dispatch(like(post))
-            } else {
-                dispatch(disLike(post))
-            }
-        })
-        .catch(e => {
-            console.log("Error when like this post: ", e)
-        })
+            .then(data => {
+                console.log(data.data.data)
+                if (!isLike) {
+                    dispatch(like(post))
+                } else {
+                    dispatch(disLike(post))
+                }
+            })
+            .catch(e => {
+                console.log("Error when like this post: ", e)
+            })
     }
 
     const handleCheckLikeByUser = () => {
@@ -117,13 +79,33 @@ function Post({ post }) {
         }
     }
 
+    const handleGetComments = async () => {
+        try {
+            const response = await newRequet.get(`/comments/${post.postId}`);
+            setCommentsCount(response.data.data.length)
+        } catch (error) {
+            console.log('Error when get comments by postId:', error);
+            throw error;
+        }
+    }
+
+    const handleShowComment = async () => {
+        dispatch(setPostComment(post))
+        dispatch(resetComments())
+        dispatch(setIsOpenCommentBox(true))
+        dispatch(fetchCommentByPostId(post.postId))
+    }
+
     useEffect(() => {
-        validateTime(post.createdAt)
+        setTimeSet(validateTime(post.createdAt))
+        
         handleCheckLikeByUser()
 
         if (!isOpenConfirmBox || isUpdatingPost) {
             setIsShowTippy(false)
-        } 
+        }
+        handleGetComments()
+        
     }, [isOpenConfirmBox, isUpdatingPost])
 
 
@@ -182,9 +164,9 @@ function Post({ post }) {
                             <i onClick={handleLikePost} className={cx('isax-heart1', { isLike })}></i>
                             <span className={cx('likes-count')}>{post.likes}</span>
                         </span>
-                        <span className={cx('comment-box')}>
+                        <span onClick={handleShowComment} className={cx('comment-box')}>
                             <i className="fa-regular fa-comment"></i>
-                            <span className={cx('comment-count')}>12</span>
+                            <span className={cx('comment-count')}>{ commentsCount && commentsCount }</span>
                         </span>
                     </span>
                     <span className={cx('time-post')}>

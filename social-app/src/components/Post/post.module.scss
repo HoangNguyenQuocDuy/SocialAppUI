@@ -125,14 +125,15 @@
             }
 
             .comment-box {
-                i {
-                    transition: .25s;
-                    cursor: pointer;
-                    margin-right: 6px;
+                cursor: pointer;
+                transition: .25s;
 
-                    &:hover {
-                        color: var(--pink);
-                    }
+                i {
+                    margin-right: 6px;
+                }
+
+                &:hover {
+                    color: var(--pink);
                 }
             }
 

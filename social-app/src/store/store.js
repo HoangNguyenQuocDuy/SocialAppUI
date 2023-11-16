@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import accountSlice from "./slice/accountSlice";
 import postSlice from "./slice/postSlice";
 import appSlice from "./slice/appSlice";
+import commentSlice from "./slice/commentSlice";
 
 const persistConfig = {
     key: 'root',
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
     user: userSlice,
     account: accountSlice,
     posts: postSlice,
-    app: appSlice
+    app: appSlice,
+    comments: commentSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

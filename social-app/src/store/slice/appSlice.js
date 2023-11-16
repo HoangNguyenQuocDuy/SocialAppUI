@@ -19,6 +19,8 @@ const initialState = {
     isShowCancelBox: false,
     postWillBeUpdated: null,
     messageAnnounce: '',
+    isOpenCommentBox: false,
+    postComment: null,
 }
 
 
@@ -106,6 +108,18 @@ export const appSlice = createSlice({
                 messageAnnounce: action.payload
             }
         },
+        setIsOpenCommentBox: (state, action) => {
+            return {
+                ...state, 
+                isOpenCommentBox: action.payload
+            }
+        },
+        setPostComment: (state, action) => {
+            return {
+                ...state,
+                postComment: action.payload
+            }
+        }
     },
     // eslint-disable-next-line no-unused-vars
     extraReducers:(builder) => {
@@ -118,5 +132,6 @@ export default appSlice.reducer
 export const { toggleOpenGallery, handleOpenGalleryByAction, 
     toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs, setIsOpenConfirmBox,
     setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce,
-    setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce } 
+    setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce,
+    setIsOpenCommentBox, setPostComment } 
     = appSlice.actions

@@ -11,8 +11,9 @@ import Gallery from '~/components/Gallery';
 import ConfirmBox from '~/components/ConfirmBox/ConfirmBox';
 import Announce from '~/components/Announce/Announce';
 import CreatePost from '~/components/CreatePost';
-import { setIsOpenConfirmBox, setIsShowAnnounce, setIsShowCancelBox, setIsShowPostTippy, setIsUpdatingPost, setMessageAnnounce, setPostIdWillBeDeleted, setPostWillBeUpdated } from '~/store/slice/appSlice';
+import { setIsOpenCommentBox, setIsOpenConfirmBox, setIsShowAnnounce, setIsShowCancelBox, setIsShowPostTippy, setIsUpdatingPost, setMessageAnnounce, setPostIdWillBeDeleted, setPostWillBeUpdated } from '~/store/slice/appSlice';
 import newRequet from '~/untils/request';
+import CommentBox from '~/components/CommentBox/CommentBox';
 
 const cx = classnames.bind(styles)
 
@@ -20,7 +21,7 @@ function Home() {
 
   const dispatch = useDispatch()
   const { isOpenGallery, isOpenConfirmBox, postIdWillBeDeleted, isShowAnnounce, 
-    isShowCancelBox }
+    isShowCancelBox, isOpenCommentBox }
     = useSelector(state => state.app)
   const containerRef = useRef()
 
@@ -70,6 +71,7 @@ function Home() {
       dispatch(setPostWillBeUpdated(null))
       dispatch(setIsUpdatingPost(false))
       dispatch(setIsShowPostTippy(false))
+      dispatch(setIsOpenCommentBox(false))
     }
   }, [isShowAnnounce])
 
@@ -148,6 +150,7 @@ function Home() {
       {isShowCancelBox && <ConfirmBox message={'Do you want to cancel post\'s updations ?'}
         yesAction={handleCloseUpdateBox} noAction={handleCloseCancelBox} />}
       {isShowAnnounce && <Announce />}
+      {isOpenCommentBox && <CommentBox />}
     </div>
   );
 }

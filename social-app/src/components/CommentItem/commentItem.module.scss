@@ -1,0 +1,36 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0 28px;
+
+    .image-box {
+        margin-right: 10px;
+    }
+
+    .content-box {
+        flex: 1px;
+        padding: 8px 12px;
+        border-radius: 24px;
+        background-color: var(--grey-light);
+        position: relative;
+
+        .username {
+            font-size: 1.3rem;
+            text-decoration: solid;
+            font-weight: bold;
+        }
+
+        .comment {
+            font-size: 1.5rem;
+        }
+        .time {
+            position: absolute;
+            font-size: 1.2rem;
+            color: var(--grey);
+            bottom: -20px;
+            left: 14px;
+        }
+    }
+
+}
