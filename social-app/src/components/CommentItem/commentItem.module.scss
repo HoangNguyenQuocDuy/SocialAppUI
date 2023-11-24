@@ -1,6 +1,6 @@
 .wrapper {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items: center;
     padding: 6px 0 28px;
 
@@ -8,8 +8,50 @@
         margin-right: 10px;
     }
 
+    .detail {
+        cursor: pointer;
+        padding: 4px 8px;
+        background-color: var(--grey-light);
+        border-radius: 30px;
+        transition: .15s;
+
+        &:hover {
+            background-color: var(--grey);
+        }
+    }
+
+    .tools {
+        background-color: var(--white);
+        box-shadow: var(--box-shadow-home-item);
+        border-radius: 10px;
+        overflow: hidden;
+        width: 180%;
+        li {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: .15s;
+            color: var(--content-post-grey);
+            width: 100%;
+
+            &:hover {
+                color: var(--pink);
+                background-color: var(--nav-active-pink);
+            }
+
+            i {
+                padding-right: 16px;
+            }
+
+            &.hide{
+                width: 200%;
+            }
+        }
+
+    }
+
     .content-box {
-        flex: 1px;
+        // flex: 1px;
+
         padding: 8px 12px;
         border-radius: 24px;
         background-color: var(--grey-light);
@@ -24,12 +66,14 @@
         .comment {
             font-size: 1.5rem;
         }
+
         .time {
             position: absolute;
             font-size: 1.2rem;
             color: var(--grey);
             bottom: -20px;
             left: 14px;
+            width: 200%;
         }
     }
 

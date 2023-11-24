@@ -21,6 +21,8 @@ const initialState = {
     messageAnnounce: '',
     isOpenCommentBox: false,
     postComment: null,
+    commentIdIsUpdating: '',
+    commentIdWillBeDeleted: ''
 }
 
 
@@ -92,46 +94,58 @@ export const appSlice = createSlice({
         setPostWillBeUpdated: (state, action) => {
 
             return {
-                ...state, 
-                postWillBeUpdated: action.payload
+                ...state,
+                postWillBeUpdated: {...action.payload}
             }
         },
         setIsShowCancelBox: (state, action) => {
             return {
-                ...state, 
+                ...state,
                 isShowCancelBox: action.payload
             }
         },
         setMessageAnnounce: (state, action) => {
             return {
-                ...state, 
+                ...state,
                 messageAnnounce: action.payload
             }
         },
         setIsOpenCommentBox: (state, action) => {
             return {
-                ...state, 
+                ...state,
                 isOpenCommentBox: action.payload
             }
         },
         setPostComment: (state, action) => {
             return {
                 ...state,
-                postComment: action.payload
+                postComment: {...action.payload}
+            }
+        }, 
+        setCommentIdIsUpdating: (state, action) => {
+            return {
+                ...state,
+                commentIdIsUpdating: action.payload
+            }
+        },
+        setCommentIdWillBeDeleted: (state, action) => {
+            return {
+                ...state,
+                commentIdWillBeDeleted: action.payload
             }
         }
     },
     // eslint-disable-next-line no-unused-vars
-    extraReducers:(builder) => {
+    extraReducers: (builder) => {
 
     }
 })
 
 export default appSlice.reducer
 
-export const { toggleOpenGallery, handleOpenGalleryByAction, 
+export const { toggleOpenGallery, handleOpenGalleryByAction,
     toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs, setIsOpenConfirmBox,
     setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce,
     setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce,
-    setIsOpenCommentBox, setPostComment } 
+    setIsOpenCommentBox, setPostComment, setCommentIdIsUpdating, setCommentIdWillBeDeleted }
     = appSlice.actions

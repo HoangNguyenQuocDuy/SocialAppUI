@@ -11,23 +11,26 @@ import Gallery from '~/components/Gallery';
 import ConfirmBox from '~/components/ConfirmBox/ConfirmBox';
 import Announce from '~/components/Announce/Announce';
 import CreatePost from '~/components/CreatePost';
-import { setIsOpenCommentBox, setIsOpenConfirmBox, setIsShowAnnounce, setIsShowCancelBox, setIsShowPostTippy, setIsUpdatingPost, setMessageAnnounce, setPostIdWillBeDeleted, setPostWillBeUpdated } from '~/store/slice/appSlice';
+import { setCommentIdIsUpdating, setCommentIdWillBeDeleted, setIsOpenCommentBox, setIsOpenConfirmBox, setIsShowAnnounce, setIsShowCancelBox, setIsShowPostTippy, setIsUpdatingPost, setMessageAnnounce, setPostIdWillBeDeleted, setPostWillBeUpdated } from '~/store/slice/appSlice';
 import newRequet from '~/untils/request';
 import CommentBox from '~/components/CommentBox/CommentBox';
+import { removeComment } from '~/store/slice/commentSlice';
 
 const cx = classnames.bind(styles)
 
 function Home() {
 
   const dispatch = useDispatch()
-  const { isOpenGallery, isOpenConfirmBox, postIdWillBeDeleted, isShowAnnounce, 
+  const { isOpenGallery, isOpenConfirmBox, postIdWillBeDeleted, isShowAnnounce,
     isShowCancelBox, isOpenCommentBox }
     = useSelector(state => state.app)
   const containerRef = useRef()
+  const { postComment, commentIdWillBeDeleted } = useSelector(state => state.app)
 
   const messageDeletePostSuccessful = 'This post is deleting ...'
   // const [page, setPage] = useState(0)
   // const [hasMore, setHasMore] = useState(true);
+  console.log(postComment)
   const posts = useSelector(state => state.posts)
   // const fetchMorePosts = () => {
   //   if (hasMore) {
@@ -53,7 +56,7 @@ function Home() {
     // }
 
     // if (isShowCancelBox) <P>'</P>
-    
+
     if (isOpenConfirmBox) {
       dispatch(setIsOpenConfirmBox(false))
     }
@@ -72,11 +75,12 @@ function Home() {
       dispatch(setIsUpdatingPost(false))
       dispatch(setIsShowPostTippy(false))
       dispatch(setIsOpenCommentBox(false))
+      dispatch(setCommentIdIsUpdating(''))
     }
   }, [isShowAnnounce])
 
 
-  const token = localStorage.getItem('accessToken')
+  const { accessToken } = useSelector(state => state.account)
 
   const handleCloseConfirmBox = () => {
     dispatch(setIsOpenConfirmBox(false))
@@ -84,15 +88,14 @@ function Home() {
 
   const handleCloseCancelBox = () => {
     dispatch(setIsShowCancelBox(false))
-    
+
   }
 
   const handleDeletePost = async () => {
-
     await newRequet.delete(`/posts/delete/${postIdWillBeDeleted}`,
       {
         headers: {
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${accessToken}`
         }
       })
       .then(data => {
@@ -113,6 +116,25 @@ function Home() {
     dispatch(setIsUpdatingPost(false))
     dispatch(setPostWillBeUpdated(null))
     handleCloseCancelBox()
+  }
+
+  const handleDeleteComment = async () => {
+    console.log(postComment.postId)
+    console.log(commentIdWillBeDeleted)
+    await newRequet.delete(`/comments/${postComment.postId}/delete/${commentIdWillBeDeleted}`, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+      .then(res => {
+        console.log(res.data.data)
+        dispatch(setCommentIdWillBeDeleted(''))
+        dispatch(removeComment(commentIdWillBeDeleted))
+        dispatch(setIsOpenConfirmBox(false))
+      })
+      .catch(err => {
+        console.log('FAILED WHEN TRY TO DELETE COMMENT:', err)
+      })
   }
 
   return (
@@ -144,12 +166,19 @@ function Home() {
         </aside>
       </div>
       {isOpenGallery && <Gallery />}
-      {isOpenConfirmBox && <ConfirmBox message={'Do you want to delete this post ?'}
+
+      {commentIdWillBeDeleted && isOpenConfirmBox && postComment && <ConfirmBox message={'Do you want to delete this comment ?'}
+        yesAction={handleDeleteComment} noAction={handleCloseConfirmBox} />}
+
+      {isOpenConfirmBox && postIdWillBeDeleted && <ConfirmBox message={'Do you want to delete this post ?'}
 
         yesAction={handleDeletePost} noAction={handleCloseConfirmBox} />}
+
       {isShowCancelBox && <ConfirmBox message={'Do you want to cancel post\'s updations ?'}
         yesAction={handleCloseUpdateBox} noAction={handleCloseCancelBox} />}
+
       {isShowAnnounce && <Announce />}
+
       {isOpenCommentBox && <CommentBox />}
     </div>
   );

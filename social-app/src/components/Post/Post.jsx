@@ -25,6 +25,7 @@ function Post({ post }) {
     const { userId } = useSelector(state => state.user)
     const { isShowPostTippy, isOpenConfirmBox, isUpdatingPost } = useSelector(state => state.app)
     const [ commentsCount, setCommentsCount] = useState([])
+    const comments = useSelector(state => state.comments)
 
     const [isShowTippy, setIsShowTippy] = useState(isShowPostTippy)
 
@@ -90,10 +91,12 @@ function Post({ post }) {
     }
 
     const handleShowComment = async () => {
+        
         dispatch(setPostComment(post))
+        console.log(post)
         dispatch(resetComments())
-        dispatch(setIsOpenCommentBox(true))
         dispatch(fetchCommentByPostId(post.postId))
+        dispatch(setIsOpenCommentBox(true))
     }
 
     useEffect(() => {
@@ -106,7 +109,7 @@ function Post({ post }) {
         }
         handleGetComments()
         
-    }, [isOpenConfirmBox, isUpdatingPost])
+    }, [isOpenConfirmBox, isUpdatingPost, comments])
 
 
     return (

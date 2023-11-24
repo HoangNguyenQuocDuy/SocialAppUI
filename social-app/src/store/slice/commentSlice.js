@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { compose, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import newRequet from "~/untils/request";
 
 const initialState = []
@@ -27,6 +27,25 @@ export const commentSlice = createSlice({
         },
         addComment: (state, action) => {
             return [action.payload, ...state]
+        },
+        updateComment: (state, action) => {
+            const commentId = action.payload.commentId
+            const comment = state.find(comment => comment.commentId === commentId)
+            if (comment) {
+                const updateComment = {
+                    ...comment,
+                    content: action.payload.content,
+                    updatedAt: action.payload.updatedAt
+                }
+
+                const updateComments = state.map(comment =>
+                    comment.commentId === commentId ? updateComment : comment
+                )
+                return [...updateComments]
+            }
+        },
+        removeComment: (state, action) => {
+            return state.filter(comment => comment.commentId !== action.payload)
         }
     },
     // eslint-disable-next-line no-unused-vars
@@ -39,6 +58,6 @@ export const commentSlice = createSlice({
 })
 
 
-export const { resetComments, addComment } = commentSlice.actions
+export const { resetComments, addComment, updateComment, removeComment } = commentSlice.actions
 
 export default commentSlice.reducer

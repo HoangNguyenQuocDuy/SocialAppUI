@@ -5,24 +5,26 @@ import Image from "../Image/Image";
 import images from "~/assets/images";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { setGalleryImgs, setImgShowSlider, setIsOpenCommentBox, setPostComment, toggleOpenGallery } from "~/store/slice/appSlice";
+import { setCommentIdIsUpdating, setGalleryImgs, setImgShowSlider, setIsOpenCommentBox, setPostComment, toggleOpenGallery } from "~/store/slice/appSlice";
 import newRequet from "~/untils/request";
 import { disLike, like } from "~/store/slice/postSlice";
 import CommentItem from "../CommentItem/CommentItem";
-import { addComment } from "~/store/slice/commentSlice";
+import { addComment, updateComment } from "~/store/slice/commentSlice";
+import { validateTime } from "~/untils/validateTime";
 
 const cx = classnames.bind(styles)
 
 function CommentBox() {
     const dispatch = useDispatch()
     const { userId } = useSelector(state => state.user)
-    const { isOpenConfirmBox, isUpdatingPost, postComment } = useSelector(state => state.app)
+    const { isOpenConfirmBox, isUpdatingPost, postComment, commentIdIsUpdating } = useSelector(state => state.app)
     const comments = useSelector(state => state.comments)
-    console.log(comments)
     const [isLike, setIsLike] = useState(false)
     const token = localStorage.getItem('accessToken')
     const [commentText, setcommentText] = useState('')
+    const [updateCommentText, setUpdateCommentText] = useState('')
     const commentTxtRef = useRef()
+    const updateTxtRef = useRef()
 
     const handleOpenGallery = () => {
         dispatch(toggleOpenGallery())
@@ -78,31 +80,58 @@ function CommentBox() {
         dispatch(setIsOpenCommentBox(false))
     }
 
-    const handleCreateComment = async() => {
-        if (commentText!=='') {
+    const handleCreateComment = async () => {
+        if (commentText !== '') {
             console.log(commentText)
-            await newRequet.post(`/comments/save/${postComment.postId}`, 
+            await newRequet.post(`/comments/save/${postComment.postId}`,
+                {
+                    content: commentText
+                },
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    dispatch(addComment(response.data.data))
+                    setcommentText('')
+                    commentTxtRef.current.focus()
+                })
+                .catch(err => {
+                    console.log('ERROR when create comment:', err)
+                })
+        }
+    }
+
+    const handleUpdateComment = async (commentId) => {
+        await newRequet.patch(`/comments/${postComment.postId}/update/${commentId}`,
             {
-                content: commentText
-            } ,
+                content: updateCommentText
+            },
             {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             })
-            .then(response => {
-                dispatch(addComment(response.data.data))
-                setcommentText('')
-                commentTxtRef.current.focus()
+            .then(res => {
+                dispatch(setCommentIdIsUpdating(''))
+                dispatch(updateComment(res.data.data))
+
             })
             .catch(err => {
-                console.log('ERROR when create comment:', err)
+                console.log('ERROR when update comment:', err)
             })
-        }
     }
 
     useEffect(() => {
         handleCheckLikeByUser()
+
+        if (updateTxtRef && commentIdIsUpdating !== '') {
+            updateTxtRef.current.focus()
+            const updatingComment = comments.find(comment => comment.commentId === commentIdIsUpdating)
+
+            setUpdateCommentText(updatingComment.content)
+        }
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -110,7 +139,7 @@ function CommentBox() {
             }
         })
 
-    }, [isOpenConfirmBox, isUpdatingPost])
+    }, [isOpenConfirmBox, isUpdatingPost, commentIdIsUpdating])
 
     return (
         <section className={cx('wrapper')}>
@@ -162,8 +191,26 @@ function CommentBox() {
                         </div>
                         <div className={cx('comment-box')}>
                             {
-                                comments && comments.map(comment =>
-                                    <CommentItem key={comment.commentId} comment={comment} />
+                                comments && comments.map(comment => {
+                                    return (
+                                        commentIdIsUpdating !== '' && comment.commentId === commentIdIsUpdating ?
+                                            <section key={comment.commentId} className={cx('user-comment', 'update')}>
+                                                <span className={cx('avatar')}>
+                                                    <Image avatarPost mainImg={images.tanjirou} small circle />
+                                                </span>
+                                                <span className={cx('txt-box')}>
+                                                    <input value={updateCommentText} ref={updateTxtRef} onChange={e => { setUpdateCommentText(e.target.value) }} className={cx('txt-comment')} />
+                                                    <span onClick={() => { handleUpdateComment(comment.commentId) }} className={cx("send-icon", { active: updateComment !== '' })}>
+                                                        <i className="fa-solid fa-paper-plane"></i>
+                                                    </span>
+                                                    <span className={cx('time')}>
+                                                        {validateTime(comment.updatedAt ? comment.updatedAt : comment.createdAt)}
+                                                    </span>
+                                                </span>
+                                            </section> :
+                                            <CommentItem key={comment.commentId} comment={comment} />
+                                    )
+                                }
                                 )
                             }
                         </div>
