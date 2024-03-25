@@ -72,7 +72,11 @@ function CreatePost() {
         setIsLoading(true)
         const response = await newRequet.post(
             '/cloudinary/uploadMultipleFiles',
-            formData)
+            formData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
         setimagesSelectors(prev => [...prev, ...response.data.data])
         setIsLoading(false)
     }

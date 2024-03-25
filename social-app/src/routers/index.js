@@ -6,15 +6,19 @@ import Register from "~/pages/Register/Register";
 import Community from "~/pages/Community";
 import Trending from "~/pages/Trending";
 import Notifications from "~/pages/Notifications";
+import Chat from "~/Layout/Chat/Chat";
+import { WebSocketComponent } from "~/pages/WebSocket/WebSocket";
 
 export const publicRouters = [
     { path: routers.home, component: Home},
-    { path: routers.mess, component: Mess},
+    { path: routers.chat, component: Mess, layout: Chat},
+    { path: routers.chatRoom, component: Mess, layout: Chat},
     { path: routers.profile, component: Profile, layout: null},
     { path: routers.login, component: Login, layout: null},
     { path: routers.register, component: Register, layout: null},
     { path: routers.community, component: Community},
     { path: routers.trending, component: Trending},
     { path: routers.notifications, component: Notifications},
+    { path: '/ws', component: WebSocketComponent},
 ]
 

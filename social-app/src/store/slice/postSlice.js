@@ -10,7 +10,7 @@ export const fetchPostsData = createAsyncThunk(
     // eslint-disable-next-line no-unused-vars
     async (page) => {
         try {
-            // /posts/?page=${page}&size=${2}
+            // /posts/?${page}&size=${2}
             const response = await newRequet.get(`/posts/`);
             return response.data.data;
         } catch (err) {

@@ -4,7 +4,7 @@ import { store } from "~/store/store";
 import jwt_decode from "jwt-decode";
 
 const newRequet = axios.create({
-    baseURL: 'http://localhost:8080/api/v1',
+    baseURL: 'http://localhost:8089/api/v1',
     // withCredentials: true
 
 })

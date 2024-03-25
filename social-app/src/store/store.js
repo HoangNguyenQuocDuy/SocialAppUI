@@ -6,6 +6,8 @@ import accountSlice from "./slice/accountSlice";
 import postSlice from "./slice/postSlice";
 import appSlice from "./slice/appSlice";
 import commentSlice from "./slice/commentSlice";
+import roomSlice from "./slice/roomSlice";
+import messageSlice from "./slice/messageSlice";
 
 const persistConfig = {
     key: 'root',
@@ -17,7 +19,9 @@ const rootReducer = combineReducers({
     account: accountSlice,
     posts: postSlice,
     app: appSlice,
-    comments: commentSlice
+    comments: commentSlice,
+    messages: messageSlice,
+    rooms: roomSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

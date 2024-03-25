@@ -1,0 +1,40 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 9px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: var(--duration);
+
+    .icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 20px;
+    }
+
+    &:hover {
+        background-color: var(--light-grey);
+    }
+
+    &:hover .icon{
+        background-color: var(--grey);
+    }
+
+    &.light {
+        background-color: #fff;
+        transition: var(--duration);
+
+        &:hover {
+            background-color: var(--light-gray);
+        }
+
+        &:hover .icon{
+            background-color: var(--middle-grey);
+        }
+    }
+
+    .title {
+        font-size: 1.4rem;
+        margin-left: 10px;
+    }
+}

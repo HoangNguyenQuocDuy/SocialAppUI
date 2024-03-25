@@ -8,7 +8,7 @@ import { useState } from 'react';
 import NavItem from '~/components/NavItem';
 import routers from '~/config/routers';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '~/store/slice/accountSlice';
 import { clearUser } from '~/store/slice/userSlice';
 
@@ -16,14 +16,7 @@ const cx = classnames.bind(styles)
 
 function Header() {
   const [searchValue, setSearchValue] = useState("")
-
-  const user = {
-    userId: '123a',
-    username: 'quocduy',
-    currentName: 'Tanjirouuu (`･ω･´)',
-    email: 'quocduy@tanjirouu.com',
-    imageUrl: images.tanjirou,
-  } 
+  const user = useSelector(state => state.user)
 
   const dispatch = useDispatch();
 
@@ -54,10 +47,10 @@ function Header() {
         </label>
       </div>
       <div className={cx('person-box')}>
-        {user ?
+        {user.userId!=="" ?
           <>
             <span className={cx('avatar')}>
-              <Image mainImg={user.imageUrl} small />
+              <Image mainImg={user.imageUrl || images.noAvatar} small />
             </span>
             <div className={cx('username')}>
               {user.currentName}

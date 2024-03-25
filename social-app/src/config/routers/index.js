@@ -1,12 +1,14 @@
 const routers = {
     home: '/',
-    mess: '/messenger',
+    mess: '/messages',
     profile: '/profile/{userId}',
     login: '/login',
     register: '/register',
     community: '/community',
     trending: '/trending',
     notifications: '/notifications',
+    chat: '/rooms',
+    chatRoom: '/rooms/:roomId'
 }
 
 export default routers

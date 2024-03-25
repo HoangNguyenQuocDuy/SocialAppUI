@@ -22,7 +22,10 @@ const initialState = {
     isOpenCommentBox: false,
     postComment: null,
     commentIdIsUpdating: '',
-    commentIdWillBeDeleted: ''
+    commentIdWillBeDeleted: '',
+    roomIdActive: '',
+    userSettingVisible: false,
+    userAddRoomVisible: false,
 }
 
 
@@ -95,7 +98,7 @@ export const appSlice = createSlice({
 
             return {
                 ...state,
-                postWillBeUpdated: {...action.payload}
+                postWillBeUpdated: { ...action.payload }
             }
         },
         setIsShowCancelBox: (state, action) => {
@@ -119,9 +122,9 @@ export const appSlice = createSlice({
         setPostComment: (state, action) => {
             return {
                 ...state,
-                postComment: {...action.payload}
+                postComment: { ...action.payload }
             }
-        }, 
+        },
         setCommentIdIsUpdating: (state, action) => {
             return {
                 ...state,
@@ -132,6 +135,30 @@ export const appSlice = createSlice({
             return {
                 ...state,
                 commentIdWillBeDeleted: action.payload
+            }
+        },
+        setRoomIdActive: (state, action) => {
+            return {
+                ...state,
+                roomIdActive: action.payload
+            }
+        },
+        setUserSettingVisible: (state, action) => {
+            return {
+                ...state,
+                userSettingVisible: action.payload
+            }
+        },
+        setTheme: (state, action) => {
+            return {
+                ...state,
+                theme: action.payload
+            }
+        },
+        setUserAddRoomVisible: (state, action) => {
+            return {
+                ...state,
+                userAddRoomVisible: action.payload
             }
         }
     },
@@ -145,7 +172,8 @@ export default appSlice.reducer
 
 export const { toggleOpenGallery, handleOpenGalleryByAction,
     toggleTheme, addImgToGallerry, setImgShowSlider, setGalleryImgs, setIsOpenConfirmBox,
-    setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce,
+    setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce, setRoomIdActive,
     setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce,
-    setIsOpenCommentBox, setPostComment, setCommentIdIsUpdating, setCommentIdWillBeDeleted }
+    setIsOpenCommentBox, setPostComment, setCommentIdIsUpdating, setCommentIdWillBeDeleted,
+    setUserSettingVisible, setTheme, setUserAddRoomVisible }
     = appSlice.actions

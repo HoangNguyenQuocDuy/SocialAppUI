@@ -32,6 +32,7 @@ function Home() {
   // const [hasMore, setHasMore] = useState(true);
   console.log(postComment)
   const posts = useSelector(state => state.posts)
+  console.log(posts)
   // const fetchMorePosts = () => {
   //   if (hasMore) {
   //     try {

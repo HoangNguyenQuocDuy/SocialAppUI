@@ -30,6 +30,26 @@
     --bgc-grey: #e8e8e8;
     --bgc-grey-active: #c0c0c0;
     --brrdus: 30px;
+    --duration: .15s;
+
+    --border-color: #2f3031; 
+    --light-grey: #3a3b3c;
+    --primary: #31A24C;
+    --text-grey: #787878;
+    --grey: #767677;
+    --background: #242526;
+    --overlay: rgba(0,0,0,.6);
+    --light-gray: #f3f3f5;
+    --middle-grey: #cbcbcb;
+    --border-color-l: #e4e6eb;
+    --duration: .15s;
+    --dark-gray: #606770;
+    --text-normal: #999; 
+    --icon-close: #4d4b4b;
+    --text-black: #e4e6eb;
+    --message-gray: #3a3b3c;
+    --light-hover-grey: #d0d0d0;
+    --medium-gray: #bcc0c4;
 }
 
 html {
@@ -91,4 +111,9 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: #a8bbbf;
+}
+
+.iconMessage {
+    font-size: 2rem;
+    color: var(--pink);
 }
