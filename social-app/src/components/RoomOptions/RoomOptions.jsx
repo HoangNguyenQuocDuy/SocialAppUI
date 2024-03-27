@@ -12,14 +12,14 @@ RoomOptions.propTypes = {
   leftIcon: Proptypes.any,
   rightIcon: Proptypes.any,
   className: Proptypes.any,
-  rotateRightIcon: Proptypes.bool
+  rotateRightIcon: Proptypes.bool,
+  onClick: Proptypes.func
 }
 
-function RoomOptions({ title, list, leftIcon, rightIcon, className, rotateRightIcon }) {
-  console.log(leftIcon)
+function RoomOptions({ title, list, leftIcon, rightIcon, className, rotateRightIcon, onClick }) {
   const { theme } = useSelector(state => state.app)
   return (
-    <div className={cx("wrapper", className, { light: theme==='light' })}>
+    <div onClick={onClick} className={cx("wrapper", className, { light: theme==='light' })}>
       <p className={cx("title")}>
         {leftIcon && (
           <span className={cx("leftIcon")}>

@@ -118,7 +118,7 @@ function MessageForm() {
                 subscription.unsubscribe();
             };
         }
-        // console.log(messages)
+        inputTextRef.current.focus()
     }, [isConnect, stompClient, roomIdActive]);
 
     return (

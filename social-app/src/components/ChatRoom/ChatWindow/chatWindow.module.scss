@@ -1,6 +1,6 @@
 .wrapper {
     display: flex;
-    // flex-direction: column;
+    height: 100vh;
     width: 100%;
     padding: 1px 0 0 8px;
     justify-content: space-between;
@@ -53,19 +53,19 @@
     display: flex;
 
     &.minimize {
-        // width: calc(100% - 340px);
-        margin-left: -340px;
+        width: calc(100% - 340px);
     }
 
     .wrapper-message-box {
+        width: 100%;
         display: flex;
-        overflow-y: scroll;
+        overflow-y: auto;
         height: 100%;
         flex-direction: column-reverse;
         justify-content: end;
 
         .messages {
-            width: calc(100vw - 340px);
+            // width: calc(100% - 340px);
             display: flex;
             flex-direction: column;
             justify-content: end;
@@ -80,6 +80,11 @@
             margin-top: 4px;
             display: flex;
             align-items: center;
+            margin-left: 0 !important;
+
+            &.noAvatar {
+                margin-left: 36px !important;
+            }
 
             &.self {
                 justify-content: end;
@@ -122,11 +127,11 @@
                 &.start {
                     border-radius: 30px 30px 30px 4px
                 }
-    
+
                 &.between {
                     border-radius: 4px 30px 30px 4px;
                 }
-    
+
                 &.end {
                     border-radius: 4px 30px 30px 30px;
                 }
@@ -238,4 +243,198 @@
         background-color: #000;
         color: #fff;
     }
+}
+
+.list-users {
+    width: 100%;
+    overflow-y: auto;
+    transition: var(--duration);
+    height: 0;
+    transform: scaleY(0);
+    transform-origin: 50% 0;
+    opacity: 0;
+
+    &.show {
+        height: 100%;
+        transform: scaleY(1);
+        opacity: 1;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: var(--duration);
+        color: var(--text-normal);
+        padding: 0 20px;
+
+        &.addUser {
+            font-size: 1.4rem;
+            justify-content: start;
+            height: 58px;
+            .icon {
+                margin-right: 20px;
+            }
+
+            &.light {
+                color: var(--text-grey);
+    
+                &:hover {
+                    background-color: var(--light-gray) !important;
+                    color: #000;
+                }
+            }
+        }
+
+        &.owner {
+            display: block;
+
+            .subTitle {
+                font-size: 1.4rem;
+            }
+        }
+
+        &:hover {
+            background-color: var(--light-grey);
+            color: #fff;
+        }
+
+        &.active {
+            background-color: var(--light-grey);
+            color: #fff;
+        }
+
+        &.light {
+            color: var(--text-grey);
+
+            &:hover {
+                background-color: var(--light-gray);
+                color: #000;
+            }
+
+            &.active {
+                background-color: var(--light-gray);
+                color: #000;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+
+            .img {
+                margin: 8px 10px 8px 0;
+                width: 42px;
+                height: 42px;
+                border-radius: 999px;
+            }
+
+            .user-name {
+                font-size: 1.4rem;
+
+                &.active {
+                    color: #fff;
+                }
+
+            }
+
+        }
+
+        .checkbox {
+            display: flex;
+            align-self: center;
+            justify-content: center;
+            position: relative;
+            padding-right: 10px;
+            cursor: pointer;
+            font-size: 2rem;
+            margin-bottom: 4px;
+
+
+            .input-check {
+                visibility: hidden;
+            }
+
+            .geekmark {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 16px;
+                width: 16px;
+                border: 1px solid #000;
+                background-color: #fff;
+                border-radius: 4px;
+            }
+
+            .geekmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+            }
+
+            input:checked~.geekmark {
+                background-color: var(--primary);
+            }
+
+            input:checked~.geekmark:after {
+                display: block;
+            }
+
+            /* Styling the checkmark using webkit */
+            .geekmark:after {
+                left: 50%;
+                transform: translateY(-50%);
+                width: 4px;
+                bottom: 4px;
+                height: 12px;
+                // border: solid var(--primary);
+                border: solid #fff;
+                border-width: 0 4px 4px 0;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }
+
+            &.light {
+
+                input:checked~.geekmark {
+                    background-color: transparent;
+                }
+
+                /* Styling the checkmark using webkit */
+                .geekmark:after {
+                    border: solid var(--primary);
+                    // border: solid #fff;
+                    border-width: 0 4px 4px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                }
+
+            }
+        }
+
+    }
+
+    .tippyUserInRoom {
+        background-color: #fff;
+        color: #000;
+        padding: 6px 30px 6px 10px;
+        border-radius: 10px;
+        opacity: 0.7;
+        font-size: 1.4rem;
+        box-shadow: 0 2px 6px #333;
+
+        &:hover {
+            background-color: var(--light-gray);
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+    }
+
 }

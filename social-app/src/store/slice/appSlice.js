@@ -26,6 +26,9 @@ const initialState = {
     roomIdActive: '',
     userSettingVisible: false,
     userAddRoomVisible: false,
+    userRoomOptionActive: '',
+    userAddUserToRoom: false,
+    stompClient: null
 }
 
 
@@ -160,6 +163,24 @@ export const appSlice = createSlice({
                 ...state,
                 userAddRoomVisible: action.payload
             }
+        },
+        setUserRoomOptionActive: (state, action) => {
+            return {
+                ...state,
+                userRoomOptionActive: action.payload
+            }
+        },
+        setUserAddUserToRoom: (state, action) => {
+            return {
+                ...state, 
+                userAddUserToRoom: action.payload
+            }
+        },
+        setStompClient: (state, action) => {
+            return {
+                ...state,
+                stompClient: action.payload
+            }
         }
     },
     // eslint-disable-next-line no-unused-vars
@@ -175,5 +196,6 @@ export const { toggleOpenGallery, handleOpenGalleryByAction,
     setIsShowPostTippy, setPostIdWillBeDeleted, setIsShowAnnounce, setRoomIdActive,
     setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce,
     setIsOpenCommentBox, setPostComment, setCommentIdIsUpdating, setCommentIdWillBeDeleted,
-    setUserSettingVisible, setTheme, setUserAddRoomVisible }
+    setUserSettingVisible, setTheme, setUserAddRoomVisible, setUserRoomOptionActive,
+    setUserAddUserToRoom, setStompClient }
     = appSlice.actions

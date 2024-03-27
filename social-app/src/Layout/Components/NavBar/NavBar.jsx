@@ -17,19 +17,9 @@ const navItems = [
         content: 'Dashboard'
     },
     {
-        to: '/community',
-        icon: <i className="isax-profile-2user1"></i>,
-        content: 'Community'
-    },
-    {
-        to: '/trending',
-        icon: <i className="isax-home-trend-up1"></i>,
-        content: 'Trending'
-    },
-    {
-        to: '/notifications',
-        icon: <i className="isax-notification-bing1"></i>,
-        content: 'Notifications'
+        to: '/rooms',
+        icon: <i className="fa-regular fa-comment"></i>,
+        content: 'Chat'
     },
 ]
 

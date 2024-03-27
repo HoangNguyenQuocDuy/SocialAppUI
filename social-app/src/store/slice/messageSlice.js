@@ -36,7 +36,6 @@ export const messageSlice = createSlice({
     // eslint-disable-next-line no-unused-vars
     extraReducers: (builder) => {
         builder.addCase(fetchMessageByRoomId.fulfilled, (state, action) => {
-            console.log('message from messageSlice: ', action.payload)
             return [...action.payload]
         })
     }

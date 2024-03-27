@@ -44,8 +44,10 @@
 
 .wrapperSmileIcon {
     position: absolute;
-    right: 0;
-    top: 50%;
+    content: '';
+
+    right: -12px;
+    top: 100%;
     transform: translateY(-50%);
 }
 

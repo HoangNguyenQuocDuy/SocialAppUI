@@ -5,21 +5,21 @@ import { faMagnifyingGlass, faSpinner, faX } from '@fortawesome/free-solid-svg-i
 
 import styles from './addRoom.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRoomIdActive, setUserAddRoomVisible } from '~/store/slice/appSlice';
+import { setRoomIdActive, setUserAddRoomVisible, setUserAddUserToRoom } from '~/store/slice/appSlice';
 import Icon from '~/components/Icon/Icon';
 import { useDebounce } from '~/hooks/useDebounce';
 import newRequet from '~/untils/request';
 import ImageChatBox from '~/components/ImageChatBox';
-import sockJS from 'sockjs-client/dist/sockjs'
 import { useNavigate } from 'react-router-dom';
-import { over } from 'stompjs';
 import { fetchRoomByUserId } from '~/store/slice/roomSlice';
+import { over } from 'stompjs';
+import sockJS from 'sockjs-client/dist/sockjs'
 
 const cx = classNames.bind(styles);
 
 function AddRoom() {
     const dispatch = useDispatch()
-    const { theme, userAddRoomVisible } = useSelector(state => state.app)
+    const { theme, userAddRoomVisible, userAddUserToRoom, roomIdActive } = useSelector(state => state.app)
     const [nameValue, setNameValue] = useState('');
     const [membersValue, setMembersValue] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
@@ -32,6 +32,9 @@ function AddRoom() {
     const navigate = useNavigate()
     const [isConnect, setIsConnect] = useState(false);
     const [stompClient, setStompClient] = useState(null);
+    const { userId } = useSelector(state => state.user)
+    const [roomData, setRoomData] = useState(null)
+    const rooms = useSelector(state => state.rooms)
 
     const onConnect = () => {
         console.log('connect ws successful')
@@ -64,17 +67,23 @@ function AddRoom() {
         }
     }
 
-    const handleCreateRoom = async (e) => {
-        e.preventDefault()
-        if (selectedUsers.length > 0) {
-            const data = {
-                roomName: nameValue,
-                usersIds: [currentUser.userId, ...selectedUsers.map(user => user.userId)]
-            }
-            createRoom(data)
+    const addUserToRoom = (data) => {
+        if (stompClient && stompClient.connected) {
+            console.log('data: ', data)
+            stompClient.send('/app/chat.addUserToChatRoom', {}, JSON.stringify(data));
+            console.log('User to room sent:', data);
         } else {
-            alert('Cần thêm ít nhất 1 thành viên để tạo nhóm.')
+            console.log('Not connected to WebSocket');
         }
+    }
+
+    const handleCreateRoom = async () => {
+        const data = {
+            roomName: nameValue,
+            usersIds: [currentUser.userId, ...selectedUsers.map(user => user.userId)],
+            ownerId: userId
+        }
+        createRoom(data)
     }
 
     const handleDeleteSelectedUser = (user) => {
@@ -84,29 +93,40 @@ function AddRoom() {
     };
 
     useEffect(() => {
-        if (!stompClient) {
+        if (!stompClient && !isConnect) {
             connect()
         }
-        console.log('isConnect: ', isConnect)
-        console.log('stompClient: ', stompClient)
-        if (isConnect && stompClient) {
-            const subscription = stompClient.subscribe('/rooms', (room) => {
-                const receiveRoom = JSON.parse(room.body)
-                console.log('Received room:', JSON.parse(room.body));
-                // dispatch(setRoomIdActive(room.body));
-                dispatch(fetchRoomByUserId(accessToken));
-                dispatch(setRoomIdActive(receiveRoom.id))
-                dispatch(setUserAddRoomVisible(false))
-                setTimeout(() => {
-                    navigate(`/rooms/${receiveRoom.id}`)
-                }, 500)
-            });
+        if (isConnect && stompClient)  {
 
-            return () => {
-                subscription.unsubscribe();
-            };
+            if (userAddUserToRoom) {
+                const subscriptionUserToRoom = stompClient.subscribe(`/rooms/${roomIdActive}/addUser`, (room) => {
+                    console.log('Received room from addUserToRoom:', JSON.parse(room.body));
+                    dispatch(fetchRoomByUserId(accessToken));
+                    dispatch(setUserAddRoomVisible(false))
+                    dispatch(setUserAddUserToRoom(false))
+                });
+
+                return () => {
+                    subscriptionUserToRoom.unsubscribe();
+                };
+            } else {
+                const subscriptionRoom = stompClient.subscribe('/rooms', (room) => {
+                    const receiveRoom = JSON.parse(room.body)
+                    console.log('Received room from createRoom:', JSON.parse(room.body));
+                    dispatch(fetchRoomByUserId(accessToken));
+                    dispatch(setRoomIdActive(receiveRoom.id))
+                    dispatch(setUserAddRoomVisible(false))
+                    setTimeout(() => {
+                        navigate(`/rooms/${receiveRoom.id}`)
+                    }, 500)
+                });
+
+                return () => {
+                    subscriptionRoom.unsubscribe();
+                };
+            }
         }
-    }, [isConnect, stompClient])
+    }, [stompClient, userAddUserToRoom, userAddRoomVisible, isConnect])
 
     useEffect(() => {
         if (!userAddRoomVisible) {
@@ -114,7 +134,10 @@ function AddRoom() {
             setMembersValue('');
             setSelectedUsers([]);
         }
-    }, [userAddRoomVisible]);
+        if (userAddUserToRoom) {
+            setRoomData(rooms.find(room => room.id === roomIdActive))
+        }
+    }, [userAddRoomVisible, userAddUserToRoom]);
 
     const handleSelectUser = (user) => {
         if (
@@ -138,8 +161,14 @@ function AddRoom() {
             }
         })
             .then(data => {
-                console.log(data)
-                setListUsers(data.data.data.filter(user => user.userId !== currentUser.userId))
+                if (roomData) {
+                    let usersExited = roomData.users.map(user => user.userId)
+
+                    let usersResult = data.data.data.filter(user => !usersExited.includes(user.userId))
+                    setListUsers(usersResult)
+                } else {
+                    setListUsers(data.data.data.filter(user => user.userId !== currentUser.userId))
+                }
                 setLoading(false)
             })
             .catch(err => {
@@ -161,39 +190,70 @@ function AddRoom() {
     const handleCloseForm = (e) => {
         e.preventDefault()
         dispatch(setUserAddRoomVisible(false))
+        if (userAddUserToRoom) {
+            dispatch(setUserAddUserToRoom(false))
+        }
+    }
+
+    const handleAddUserToRoom = () => {
+        const data = {
+            roomId: roomIdActive,
+            usersIds: selectedUsers.map(user => user.userId),
+        }
+        addUserToRoom(data)
+    }
+
+    const handleClickAddBtn = (e) => {
+        e.preventDefault()
+        if (selectedUsers.length > 0) {
+            if (userAddUserToRoom) {
+                handleAddUserToRoom()
+            } else {
+                handleCreateRoom()
+            }
+        } else {
+            if (userAddUserToRoom) {
+                alert('Cần thêm ít nhất 1 thành viên để thêm vào nhóm.')
+            } else {
+                alert('Cần thêm ít nhất 1 thành viên để tạo nhóm.')
+            }
+        }
     }
 
     return (
         <div>
             <form className={cx('wrapper', { light: theme === 'light' })}>
                 <p className={cx('title')}>
-                    Tạo nhóm chat
+                    {userAddUserToRoom && roomData ? roomData.roomName : 'Tạo nhóm chat'}
                     <Icon
                         onClick={(e) => { handleCloseForm(e) }}
                         className={cx('remove')}
                         icon={'fa-solid fa-x'}
                     />
                 </p>
-                <div className={cx('box-name')}>
-                    <label
-                        htmlFor="inputName"
-                        className={cx('label', { active: nameValue !== '', light: theme === 'light' })}
-                    >
-                        Nhập tên nhóm
-                    </label>
-                    <div className={cx('input-name')}>
-                        <input
-                            onChange={(e) => {
-                                setNameValue(e.target.value);
-                            }}
-                            value={nameValue}
-                            id={'inputName'}
-                            placeholder="Tên nhóm..."
-                            type="text"
-                            className={cx({ light: theme === 'light' })}
-                        />
+                {
+                    !userAddUserToRoom &&
+                    <div className={cx('box-name')}>
+                        <label
+                            htmlFor="inputName"
+                            className={cx('label', { active: nameValue !== '', light: theme === 'light' })}
+                        >
+                            Nhập tên nhóm
+                        </label>
+                        <div className={cx('input-name')}>
+                            <input
+                                onChange={(e) => {
+                                    setNameValue(e.target.value);
+                                }}
+                                value={nameValue}
+                                id={'inputName'}
+                                placeholder="Tên nhóm..."
+                                type="text"
+                                className={cx({ light: theme === 'light' })}
+                            />
+                        </div>
                     </div>
-                </div>
+                }
                 <div className={cx('box-add')}>
                     <label
                         className={cx('label', {
@@ -295,8 +355,8 @@ function AddRoom() {
                     </div>
                 </div>
                 <div className={cx('add-group', { active: selectedUsers.length > 0 })}>
-                    <button onClick={handleCreateRoom} className={cx({ active: selectedUsers.length > 0 })}>
-                        Thêm nhóm
+                    <button onClick={(e) => { handleClickAddBtn(e) }} className={cx({ active: selectedUsers.length > 0 })}>
+                        {userAddUserToRoom ? 'Thêm' : 'Thêm nhóm'}
                     </button>
                 </div>
             </form>

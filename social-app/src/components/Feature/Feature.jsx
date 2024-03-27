@@ -17,8 +17,6 @@ Feature.propTypes = {
 function Feature({ icon, title, onClick, className, }) {
   const { theme } = useSelector(state => state.app)
 
-  console.log(onClick)
-
   return (
     <div className={cx("wrapper", className, { light: theme==='light'})} onClick={onClick}>
       <Icon width='20px' noBackground className={cx('icon')} icon={icon} />

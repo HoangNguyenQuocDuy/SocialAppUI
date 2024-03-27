@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRoomByUserId } from "~/store/slice/roomSlice";
 import { setUserAddRoomVisible, setUserSettingVisible } from "~/store/slice/appSlice";
 import ImageChatBox from "~/components/ImageChatBox";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -53,7 +54,7 @@ function Sidebar() {
       <div className={cx("wrapper-header")}>
         <div className={cx("header")}>
           <ImageChatBox onClick={handleOpenUserSetting} className={cx("img")} src="" />
-          <span>Chat App</span>
+          <Link className={cx('title', { light: theme==='light' })} to={'/'}>Chat App</Link>
           <Icon onClick={handleOpenAddRoom} width="22px" icon='fa-regular fa-pen-to-square' />
         </div>
         <div className={cx("find-box")}>
