@@ -18,11 +18,11 @@ CommentItem.propTypes = {
 }
 
 function CommentItem({ comment }) {
-
     const [user, setUser] = useState({})
     const { username } = useSelector(state => state.account)
     const [isOpenTippy, setIsOpenTippy] = useState(username === user.username)
     const time = validateTime(comment.updatedAt ? comment.updatedAt : comment.createdAt)
+    const [owner, setOwner] = useState()
 
     const dispatch = useDispatch()
 
@@ -47,15 +47,26 @@ function CommentItem({ comment }) {
         dispatch(setIsOpenConfirmBox(true))
     }
 
+    const handleGetOwner = async () => {
+        await newRequet.get(`/users/id/${comment.userId}`)
+            .then(data => {
+                setOwner(data.data.data)
+            })
+            .catch(err => {
+                console.log('Err when get user by userId: ', err)
+            })
+    }
+
     useEffect(() => {
         dispatch(setIsOpenConfirmBox(false))
         handleGetUserComment()
+        handleGetOwner()
     }, [])
 
     return (
         <div className={cx('wrapper')}>
             <span className={cx('image-box')}>
-                <Image avatarPost mainImg={images.tanjirou} small circle />
+                <Image avatarPost mainImg={owner && (owner.imageUrl !== '' ? owner.imageUrl : images.noAvatar)} small circle />
             </span>
             <Tippy
                 render={attrs => (

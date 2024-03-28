@@ -19,6 +19,17 @@ export const fetchLogin = createAsyncThunk(
     }
 )
 
+export const fetchRegister = createAsyncThunk(
+    'account/fetchRegister',
+    async ({ username, password, email, currentName, imageUrl }) => {
+        const response = await newRequet.post('/auth/register', {
+            username, password, email, currentName, imageUrl
+        })
+
+        return response.data.body 
+    }
+)
+
 export const fetchRefreshToken = createAsyncThunk(
     'account/fetchRefreshToken',
     async ({ refreshToken }) => {

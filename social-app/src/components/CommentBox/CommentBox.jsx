@@ -16,7 +16,7 @@ const cx = classnames.bind(styles)
 
 function CommentBox() {
     const dispatch = useDispatch()
-    const { userId } = useSelector(state => state.user)
+    const { userId, currentName, imageUrl } = useSelector(state => state.user)
     const { isOpenConfirmBox, isUpdatingPost, postComment, commentIdIsUpdating } = useSelector(state => state.app)
     const comments = useSelector(state => state.comments)
     const [isLike, setIsLike] = useState(false)
@@ -147,9 +147,9 @@ function CommentBox() {
                 <header className={cx('header')}>
                     <div className={cx('info')}>
                         <span className={cx('img-box')}>
-                            <Image avatarPost mainImg={images.tanjirou} small circle />
+                            <Image avatarPost mainImg={imageUrl!=='' ? imageUrl : images.noAvatar} small circle />
                         </span>
-                        <span className={cx('username')}>Tanhirouuu</span>
+                        <span className={cx('username')}>{currentName}</span>
                     </div>
                     <span onClick={handleCloseCommentBox} className={cx('close-icon')}>
                         <i className="fa-solid fa-x"></i>
@@ -218,7 +218,7 @@ function CommentBox() {
                 </section>
                 <section className={cx('user-comment')}>
                     <span className={cx('avatar')}>
-                        <Image avatarPost mainImg={images.tanjirou} small circle />
+                        <Image avatarPost mainImg={imageUrl!=='' ? imageUrl : images.noAvatar} small circle />
                     </span>
                     <span className={cx('txt-box')}>
                         <input value={commentText} ref={commentTxtRef} onChange={e => { setcommentText(e.target.value) }} placeholder="Write your comment..." className={cx('txt-comment')} />

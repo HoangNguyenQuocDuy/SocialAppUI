@@ -10,8 +10,8 @@
     font-family: "Rubik";
 
     .container {
-        width: 860px;
-        height: 500px;
+        width: 900px;
+        // height: 600px;
         background-color: #fff1ea;
         border-radius: 30px;
         box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
@@ -48,8 +48,12 @@
                 }
             }
 
-            .username {
-                margin: 40px 0 26px 0;
+            .username, .email {
+                margin: 20px 0;
+            }
+
+            .imageUrl {
+                margin-top: 20px;
             }
 
             .btn-box {
@@ -96,22 +100,18 @@
                 width: 160px;
             }
         }
-    }
 
-    .register, .forgotPassword {
-        margin-top: 40px;
-        color: #888;
-        font-size: 1.6rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .link {
-            color: var(--pink);
+        .login {
+            padding-top: 40px;
+            color: #888;
+            font-size: 1.6rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+    
+            .link {
+                color: var(--pink);
+            }
         }
-    }
-
-    .forgotPassword {
-        margin-top: 20px;
     }
 }

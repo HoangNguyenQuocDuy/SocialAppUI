@@ -18,6 +18,8 @@ function Header() {
   const [searchValue, setSearchValue] = useState("")
   const user = useSelector(state => state.user)
 
+  console.log(user)
+
   const dispatch = useDispatch();
 
   const handleLogout = (e) => {
@@ -50,7 +52,7 @@ function Header() {
         {user.userId!=="" ?
           <>
             <span className={cx('avatar')}>
-              <Image mainImg={user.imageUrl || images.noAvatar} small />
+              <Image mainImg={user.imageUrl!=='' ? user.imageUrl : images.noAvatar} small />
             </span>
             <div className={cx('username')}>
               {user.currentName}

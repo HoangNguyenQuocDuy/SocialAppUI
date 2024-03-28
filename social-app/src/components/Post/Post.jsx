@@ -24,8 +24,9 @@ function Post({ post }) {
     const dispatch = useDispatch()
     const { userId } = useSelector(state => state.user)
     const { isShowPostTippy, isOpenConfirmBox, isUpdatingPost } = useSelector(state => state.app)
-    const [ commentsCount, setCommentsCount] = useState([])
+    const [commentsCount, setCommentsCount] = useState([])
     const comments = useSelector(state => state.comments)
+    const [owner, setOwner] = useState()
 
     const [isShowTippy, setIsShowTippy] = useState(isShowPostTippy)
 
@@ -91,7 +92,7 @@ function Post({ post }) {
     }
 
     const handleShowComment = async () => {
-        
+
         dispatch(setPostComment(post))
         console.log(post)
         dispatch(resetComments())
@@ -99,18 +100,31 @@ function Post({ post }) {
         dispatch(setIsOpenCommentBox(true))
     }
 
+    const handleGetOwner = async () => {
+        await newRequet.get(`/users/id/${post.userId}`)
+            .then(data => {
+                setOwner(data.data.data)
+            })
+            .catch(err => {
+                console.log('Err when get user by userId: ', err)
+            })
+    }
+
     useEffect(() => {
         setTimeSet(validateTime(post.createdAt))
-        
+
         handleCheckLikeByUser()
 
         if (!isOpenConfirmBox || isUpdatingPost) {
             setIsShowTippy(false)
         }
         handleGetComments()
-        
     }, [isOpenConfirmBox, isUpdatingPost, comments])
 
+
+    useEffect(() => {
+        handleGetOwner()
+    }, [])
 
     return (
         <div className={cx('wrapper')}>
@@ -118,9 +132,9 @@ function Post({ post }) {
                 <header className={cx('header')}>
                     <div className={cx('info')}>
                         <span className={cx('img-box')}>
-                            <Image avatarPost mainImg={images.tanjirou} small circle />
+                            <Image avatarPost mainImg={owner && (owner.imageUrl !== '' ? owner.imageUrl : images.noAvatar)} small circle />
                         </span>
-                        <span className={cx('username')}>Tanhirouuu</span>
+                        <span className={cx('username')}>{owner && owner.currentName}</span>
                     </div>
                     {post.userId === userId &&
                         <Tippy
@@ -169,7 +183,7 @@ function Post({ post }) {
                         </span>
                         <span onClick={handleShowComment} className={cx('comment-box')}>
                             <i className="fa-regular fa-comment"></i>
-                            <span className={cx('comment-count')}>{ commentsCount && commentsCount }</span>
+                            <span className={cx('comment-count')}>{commentsCount && commentsCount}</span>
                         </span>
                     </span>
                     <span className={cx('time-post')}>

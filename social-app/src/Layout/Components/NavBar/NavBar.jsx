@@ -7,6 +7,7 @@ import Image from "~/components/Image/Image";
 import Tippy from "@tippyjs/react";
 import 'tippy.js/dist/tippy.css';
 import images from "~/assets/images";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles)
 
@@ -23,15 +24,10 @@ const navItems = [
     },
 ]
 
-const user = {
-    userId: '123a',
-    username: 'quocduy',
-    currentName: 'Tanjirouuu (`･ω･´)',
-    email: 'quocduy@tanjirouu.com',
-    imageUrl: images.tanjirou,
-  }
 
 function NavBar() {
+
+    const { imageUrl } = useSelector(state => state.user)
 
     return (
         <div className={cx('wrapper')}>
@@ -52,7 +48,7 @@ function NavBar() {
 
             <div className={cx('tool-user')}>
                 <div className={cx('user-info')}>
-                    <Image active mainImg={user.imageUrl} small/>
+                    <Image active mainImg={imageUrl !== '' ? imageUrl : images.noAvatar} small />
                 </div>
                 <div className={cx('setting-box')}>
                     <Tippy delay={[0, 200]} className={cx('sun-icon')} content="🌙 Night mode">

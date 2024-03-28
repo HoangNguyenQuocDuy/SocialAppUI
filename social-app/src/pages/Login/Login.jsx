@@ -7,8 +7,9 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchUserData } from '~/store/slice/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchLogin } from '~/store/slice/accountSlice';
+import routers from '~/config/routers';
 
 const cx = classnames.bind(styles)
 
@@ -48,6 +49,12 @@ function Login() {
           <div className={cx('btn-box')}>
             <button onClick={(e) => { handleSubmitUser(e) }} className={cx('login-btn')}>Countinue</button>
           </div>
+          <div className={cx('register')}>
+            {`Don't have an account? `}<Link className={cx('link')} to={routers.register}>Register</Link>
+          </div> 
+          <div className={cx('forgotPassword')}>
+            <Link className={cx('link')} to={routers.forgotPassword}>Forgot password</Link>
+          </div> 
         </form>
         <div className={cx('image-box')}>
           <img src={images.catFat} />

@@ -7,6 +7,8 @@ import Community from "~/pages/Community";
 import Trending from "~/pages/Trending";
 import Notifications from "~/pages/Notifications";
 import Chat from "~/Layout/Chat/Chat";
+import ForgotPassword from "~/components/ForgotPassword/ForgotPassword";
+import ResetPassword from "~/components/ResetPassword/ResetPassword";
 
 export const publicRouters = [
     { path: routers.home, component: Home},
@@ -18,5 +20,7 @@ export const publicRouters = [
     { path: routers.community, component: Community},
     { path: routers.trending, component: Trending},
     { path: routers.notifications, component: Notifications},
+    { path: routers.forgotPassword, component: ForgotPassword, layout: null},
+    { path: routers.resetPassword, component: ResetPassword, layout: null},
 ]
 

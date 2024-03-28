@@ -28,7 +28,8 @@ const initialState = {
     userAddRoomVisible: false,
     userRoomOptionActive: '',
     userAddUserToRoom: false,
-    stompClient: null
+    emailResetPassword: '',
+
 }
 
 
@@ -176,10 +177,10 @@ export const appSlice = createSlice({
                 userAddUserToRoom: action.payload
             }
         },
-        setStompClient: (state, action) => {
+        setEmailResetPassword: (state, action) => {
             return {
                 ...state,
-                stompClient: action.payload
+                emailResetPassword: action.payload
             }
         }
     },
@@ -197,5 +198,5 @@ export const { toggleOpenGallery, handleOpenGalleryByAction,
     setIsUpdatingPost, setPostWillBeUpdated, setIsShowCancelBox, setMessageAnnounce,
     setIsOpenCommentBox, setPostComment, setCommentIdIsUpdating, setCommentIdWillBeDeleted,
     setUserSettingVisible, setTheme, setUserAddRoomVisible, setUserRoomOptionActive,
-    setUserAddUserToRoom, setStompClient }
+    setUserAddUserToRoom, setEmailResetPassword }
     = appSlice.actions

@@ -8,7 +8,9 @@ const routers = {
     trending: '/trending',
     notifications: '/notifications',
     chat: '/rooms',
-    chatRoom: '/rooms/:roomId'
+    chatRoom: '/rooms/:roomId',
+    forgotPassword: '/forgotPassword',
+    resetPassword: '/resetPassword',
 }
 
 export default routers

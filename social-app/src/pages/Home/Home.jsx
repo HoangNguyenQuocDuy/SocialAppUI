@@ -2,7 +2,7 @@ import classnames from 'classnames/bind'
 // import InfiniteScroll from 'react-infinite-scroll-component';
 
 import styles from './home.module.scss'
-import Stories from '~/components/Stories';
+// import Stories from '~/components/Stories';
 import Post from '~/components/Post';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
@@ -143,9 +143,9 @@ function Home() {
       <div ref={containerRef} className={cx('container')}>
         <aside className={cx('wrapper-left')}>
           <CreatePost />
-          <div className={cx('stories')}>
+          {/* <div className={cx('stories')}>
             <Stories />
-          </div>
+          </div> */}
           <div className={cx('posts')}>
             {/* <InfiniteScroll
               dataLength={posts.length}
